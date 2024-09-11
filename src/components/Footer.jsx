@@ -1,10 +1,16 @@
 import logo from "../assets/images/logo/logo.svg";
+import bg from "../assets/images/poster/background.svg"
 
 const Footer = () => {
   return (
     <footer
-      className="relative z-10 bg-dark pt-20 lg:pt-[100px]"
+      className="z-0 pt-20 lg:pt-[100px]"
       data-wow-delay=".15s"
+      style={{
+        backgroundImage: `linear-gradient(180deg, rgb(17, 25, 40), rgba(0, 0, 0, 0.1)), url(${bg})`,
+        backgroundRepeat: 'repeat',
+        backgroundSize: '25%',
+      }}
     >
       <div className="container">
         <div className="-mx-4 flex flex-wrap justify-between">

@@ -4,13 +4,15 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 
 function App() {
+  const hideNavAndFooter = location.pathname === "/sign-in" || location.pathname === "/sign-up";
+
   return (
     <>
-      <Navbar />
+      {!hideNavAndFooter && <Navbar />}
       <main>
         <Outlet />
       </main>
-      <Footer />
+      {!hideNavAndFooter && <Footer />}
     </>
   );
 }

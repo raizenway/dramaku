@@ -5,6 +5,8 @@ import App from "./App";
 import Home from "./pages/Home";
 import DetailPage from "./pages/DetailPage";
 import NotFound from "./pages/NotFound";
+import SignIn from "./pages/SignIn";
+import SignUp from "./pages/SignUp";
 import "./index.css";
 import CMSCounty from "./pages/CMSCountry";
 
@@ -17,6 +19,8 @@ const router = createBrowserRouter([
       { path: "details", element: <DetailPage /> },
       { path: "cms-country", element: <CMSCounty /> },
       { path: "*", element: <NotFound /> },
+      { path: "sign-in", element: <SignIn />},
+      { path: "sign-up", element: <SignUp />},
     ],
   },
 ]);
