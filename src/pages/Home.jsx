@@ -317,7 +317,7 @@ function Home() {
         </div>
         {/* button submit */}
       </div>
-      <div className="-mx-4 flex flex-wrap">
+      <div className="-mx-4 flex flex-wrap mt-14">
         {/* film 1 */}
         <div className="w-full px-10 md:w-1/2 lg:w-1/5">
           <div className="wow fadeInUp group mb-10" data-wow-delay=".1s">

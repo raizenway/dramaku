@@ -7,7 +7,7 @@ const Footer = () => {
       className="z-0 pt-20 lg:pt-[100px]"
       data-wow-delay=".15s"
       style={{
-        backgroundImage: `linear-gradient(180deg, rgb(17, 25, 40), rgba(0, 0, 0, 0.1)), url(${bg})`,
+        backgroundImage: `linear-gradient(180deg, rgb(17, 25, 40), rgba(0, 0, 0, 0.35)), url(${bg})`,
         backgroundRepeat: 'repeat',
         backgroundSize: '25%',
       }}
