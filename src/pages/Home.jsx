@@ -1,5 +1,5 @@
 import poster1 from "../assets/images/blog/poster-1.jpg";
-// import React from "react";
+import React from "react";
 
 function Home() {
   return (
@@ -10,7 +10,7 @@ function Home() {
           Admin
         </a>
         <a
-          href="cms-awards.html"
+          href="cms-countries"
           className="mx-8 flex py-2 text-base font-medium text-white hover:text-primary"
         >
           Content Management
