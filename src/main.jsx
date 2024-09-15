@@ -7,8 +7,16 @@ import DetailPage from "./pages/DetailPage";
 import NotFound from "./pages/NotFound";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
+import CMSCountries from "./pages/CMSCountries";
+import CMSAwards from "./pages/CMSAwards";
+import CMSGenres from "./pages/CMSGenres";
+import CMSActors from "./pages/CMSActors";
+import CMSComments from "./pages/CMSComments";
+import CMSUsers from "./pages/CMSUsers";
+import CMSShows from "./pages/CMSShows";
+import CMSInputShow from "./pages/CMSInputShow";
+
 import "./index.css";
-import CMSCounty from "./pages/CMSCountry";
 
 const router = createBrowserRouter([
   {
@@ -17,7 +25,14 @@ const router = createBrowserRouter([
     children: [
       { path: "", element: <Home /> },
       { path: "details", element: <DetailPage /> },
-      { path: "cms-country", element: <CMSCounty /> },
+      { path: "cms-countries", element: <CMSCountries /> },
+      { path: "cms-awards", element: <CMSAwards /> },
+      { path: "cms-genres", element: <CMSGenres /> },
+      { path: "cms-actors", element: <CMSActors /> },
+      { path: "cms-comments", element: <CMSComments /> },
+      { path: "cms-users", element: <CMSUsers /> },
+      { path: "cms-shows", element: <CMSShows /> },
+      { path: "cms-show-input", element: <CMSInputShow /> },
       { path: "*", element: <NotFound /> },
       { path: "sign-in", element: <SignIn />},
       { path: "sign-up", element: <SignUp />},
