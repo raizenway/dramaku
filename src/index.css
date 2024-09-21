@@ -70,3 +70,126 @@
   @apply w-auto h-auto;
 }
 
+/* FEATURE */
+
+.filterButton{
+  display: flex;
+}
+
+.hideFilterButton{
+  display: none;
+}
+
+.sortButton{
+  display: flex;
+}
+
+.hideSortButton{
+  display: none;
+}
+
+.filterMobile{
+  display: none;
+}
+
+.sortMobile{
+  display: none;
+}
+
+.searchButton{
+  display: none;
+}
+
+.sidebarButton{
+  display: none;
+}
+
+.searchForm{
+  display: none;
+}
+
+.cancelButton{
+  display: none;
+}
+
+.closeButton{
+  display: none;
+}
+
+.sidebar{
+  display: none;
+  z-index: 50;
+}
+
+/* MIN WIDTH */
+@media (min-width: 540px){
+  .container{
+    max-width: 540px;
+  }
+
+  .hideOnDesktop{
+    display: none;
+  }
+
+}
+
+@media (min-width: 720px){
+  .container{
+    max-width: 720px;
+  }
+}
+
+@media (min-width: 960px){
+  .container{
+    max-width: 960px;
+  }
+}
+
+@media (min-width: 1140px){
+  .container{
+    max-width: 1140px;
+  }
+}
+
+@media (min-width: 1320px){
+  .container{
+    max-width: 1320px;
+  }
+}
+
+/* MAX WIDTH */
+@media (max-width: 540px){
+  .sm\:flex-col{
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 541px) {
+  .hideOnMobile{
+    display: none;
+  }
+  .searchButton{
+    display: flex;
+  }
+  .sidebarButton{
+    display: flex;
+  }
+}
+
+@media (max-width: 720px) {
+
+}
+
+@media (max-width: 960px) {
+
+}
+
+@media (max-width: 1140px) {
+
+}
+
+@media (max-width: 1320px) {
+  .container {
+    max-width: 1320px;
+  }
+}

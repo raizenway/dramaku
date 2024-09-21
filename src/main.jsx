@@ -5,6 +5,8 @@ import App from "./App";
 import Home from "./pages/Home";
 import DetailPage from "./pages/DetailPage";
 import NotFound from "./pages/NotFound";
+import SignIn from "./pages/SignIn";
+import SignUp from "./pages/SignUp";
 import CMSCountries from "./pages/CMSCountries";
 import CMSAwards from "./pages/CMSAwards";
 import CMSGenres from "./pages/CMSGenres";
@@ -13,7 +15,6 @@ import CMSComments from "./pages/CMSComments";
 import CMSUsers from "./pages/CMSUsers";
 import CMSShows from "./pages/CMSShows";
 import CMSInputShow from "./pages/CMSInputShow";
-
 
 import "./index.css";
 
@@ -33,6 +34,8 @@ const router = createBrowserRouter([
       { path: "cms-shows", element: <CMSShows /> },
       { path: "cms-show-input", element: <CMSInputShow /> },
       { path: "*", element: <NotFound /> },
+      { path: "sign-in", element: <SignIn />},
+      { path: "sign-up", element: <SignUp />},
     ],
   },
 ]);
