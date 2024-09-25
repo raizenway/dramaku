@@ -58,7 +58,7 @@ function Home() {
       Admin
     </a>
     <a
-      href="cms-awards.html"
+      href="/cms-shows"
       className="mx-8 flex py-2 text-base font-medium text-white hover:text-primary"
     >
       Content Management
