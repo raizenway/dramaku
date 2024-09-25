@@ -94,7 +94,7 @@ function Home() {
       Admin
     </a>
     <a
-      href="cms-awards.html"
+      href="/cms-shows"
       className="mx-8 flex py-2 text-base font-medium text-white hover:text-primary"
     >
       Content Management
@@ -322,7 +322,7 @@ function Home() {
         <div className="w-full px-10 md:w-1/2 lg:w-1/5">
           <div className="wow fadeInUp group mb-10" data-wow-delay=".1s">
             <div className="mb-8 overflow-hidden rounded-[5px]">
-              <a href="detail-page.html" className="block">
+              <a href="/details" className="block">
                 <img
                   src={poster1}
                   alt="image"
@@ -333,7 +333,7 @@ function Home() {
             {/* title   */}
             <h3>
               <a
-                href="detail-page.html"
+                href="/details"
                 className="mb-4 inline-block text-xl font-semibold text-dark hover:text-primary dark:text-white dark:hover:text-primary sm:text-2xl lg:text-xl xl:text-2xl"
               >
                 [Title]
@@ -392,7 +392,7 @@ function Home() {
         <div className="w-full px-10 md:w-1/2 lg:w-1/5">
           <div className="wow fadeInUp group mb-10" data-wow-delay=".1s">
             <div className="mb-8 overflow-hidden rounded-[5px]">
-              <a href="detail-page.html" className="block">
+              <a href="/details" className="block">
                 <img
                   src={poster1}
                   alt="image"
@@ -403,7 +403,7 @@ function Home() {
             {/* title   */}
             <h3>
               <a
-                href="detail-page.html"
+                href="/details"
                 className="mb-4 inline-block text-xl font-semibold text-dark hover:text-primary dark:text-white dark:hover:text-primary sm:text-2xl lg:text-xl xl:text-2xl"
               >
                 [Title]
@@ -462,7 +462,7 @@ function Home() {
         <div className="w-full px-10 md:w-1/2 lg:w-1/5">
           <div className="wow fadeInUp group mb-10" data-wow-delay=".1s">
             <div className="mb-8 overflow-hidden rounded-[5px]">
-              <a href="detail-page.html" className="block">
+              <a href="/details" className="block">
                 <img
                   src={poster1}
                   alt="image"
@@ -473,7 +473,7 @@ function Home() {
             {/* title   */}
             <h3>
               <a
-                href="detail-page.html"
+                href="/details"
                 className="mb-4 inline-block text-xl font-semibold text-dark hover:text-primary dark:text-white dark:hover:text-primary sm:text-2xl lg:text-xl xl:text-2xl"
               >
                 [Title]
@@ -532,7 +532,7 @@ function Home() {
         <div className="w-full px-10 md:w-1/2 lg:w-1/5">
           <div className="wow fadeInUp group mb-10" data-wow-delay=".1s">
             <div className="mb-8 overflow-hidden rounded-[5px]">
-              <a href="detail-page.html" className="block">
+              <a href="/details" className="block">
                 <img
                   src={poster1}
                   alt="image"
@@ -543,7 +543,7 @@ function Home() {
             {/* title   */}
             <h3>
               <a
-                href="detail-page.html"
+                href="/details"
                 className="mb-4 inline-block text-xl font-semibold text-dark hover:text-primary dark:text-white dark:hover:text-primary sm:text-2xl lg:text-xl xl:text-2xl"
               >
                 [Title]
@@ -602,7 +602,7 @@ function Home() {
         <div className="w-full px-10 md:w-1/2 lg:w-1/5">
           <div className="wow fadeInUp group mb-10" data-wow-delay=".1s">
             <div className="mb-8 overflow-hidden rounded-[5px]">
-              <a href="detail-page.html" className="block">
+              <a href="/details" className="block">
                 <img
                   src={poster1}
                   alt="image"
@@ -613,7 +613,7 @@ function Home() {
             {/* title   */}
             <h3>
               <a
-                href="detail-page.html"
+                href="/details"
                 className="mb-4 inline-block text-xl font-semibold text-dark hover:text-primary dark:text-white dark:hover:text-primary sm:text-2xl lg:text-xl xl:text-2xl"
               >
                 [Title]
@@ -672,7 +672,7 @@ function Home() {
         <div className="w-full px-10 md:w-1/2 lg:w-1/5">
           <div className="wow fadeInUp group mb-10" data-wow-delay=".1s">
             <div className="mb-8 overflow-hidden rounded-[5px]">
-              <a href="detail-page.html" className="block">
+              <a href="/details" className="block">
                 <img
                   src={poster1}
                   alt="image"
@@ -683,7 +683,7 @@ function Home() {
             {/* title   */}
             <h3>
               <a
-                href="detail-page.html"
+                href="/details"
                 className="mb-4 inline-block text-xl font-semibold text-dark hover:text-primary dark:text-white dark:hover:text-primary sm:text-2xl lg:text-xl xl:text-2xl"
               >
                 [Title]
@@ -742,7 +742,7 @@ function Home() {
         <div className="w-full px-10 md:w-1/2 lg:w-1/5">
           <div className="wow fadeInUp group mb-10" data-wow-delay=".1s">
             <div className="mb-8 overflow-hidden rounded-[5px]">
-              <a href="detail-page.html" className="block">
+              <a href="/details" className="block">
                 <img
                   src={poster1}
                   alt="image"
@@ -753,7 +753,7 @@ function Home() {
             {/* title   */}
             <h3>
               <a
-                href="detail-page.html"
+                href="/details"
                 className="mb-4 inline-block text-xl font-semibold text-dark hover:text-primary dark:text-white dark:hover:text-primary sm:text-2xl lg:text-xl xl:text-2xl"
               >
                 [Title]
@@ -812,7 +812,7 @@ function Home() {
         <div className="w-full px-10 md:w-1/2 lg:w-1/5">
           <div className="wow fadeInUp group mb-10" data-wow-delay=".1s">
             <div className="mb-8 overflow-hidden rounded-[5px]">
-              <a href="detail-page.html" className="block">
+              <a href="/details" className="block">
                 <img
                   src={poster1}
                   alt="image"
@@ -823,7 +823,7 @@ function Home() {
             {/* title   */}
             <h3>
               <a
-                href="detail-page.html"
+                href="/details"
                 className="mb-4 inline-block text-xl font-semibold text-dark hover:text-primary dark:text-white dark:hover:text-primary sm:text-2xl lg:text-xl xl:text-2xl"
               >
                 [Title]
@@ -882,7 +882,7 @@ function Home() {
         <div className="w-full px-10 md:w-1/2 lg:w-1/5">
           <div className="wow fadeInUp group mb-10" data-wow-delay=".1s">
             <div className="mb-8 overflow-hidden rounded-[5px]">
-              <a href="detail-page.html" className="block">
+              <a href="/details" className="block">
                 <img
                   src={poster1}
                   alt="image"
@@ -893,7 +893,7 @@ function Home() {
             {/* title   */}
             <h3>
               <a
-                href="detail-page.html"
+                href="/details"
                 className="mb-4 inline-block text-xl font-semibold text-dark hover:text-primary dark:text-white dark:hover:text-primary sm:text-2xl lg:text-xl xl:text-2xl"
               >
                 [Title]
@@ -952,7 +952,7 @@ function Home() {
         <div className="w-full px-10 md:w-1/2 lg:w-1/5">
           <div className="wow fadeInUp group mb-10" data-wow-delay=".1s">
             <div className="mb-8 overflow-hidden rounded-[5px]">
-              <a href="detail-page.html" className="block">
+              <a href="/details" className="block">
                 <img
                   src={poster1}
                   alt="image"
@@ -963,7 +963,7 @@ function Home() {
             {/* title   */}
             <h3>
               <a
-                href="detail-page.html"
+                href="/details"
                 className="mb-4 inline-block text-xl font-semibold text-dark hover:text-primary dark:text-white dark:hover:text-primary sm:text-2xl lg:text-xl xl:text-2xl"
               >
                 [Title]
