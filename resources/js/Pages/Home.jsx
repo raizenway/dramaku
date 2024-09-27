@@ -62,12 +62,12 @@ export default function Home() {
         <a className="mx-8 mt-8 mb-4 inline-block text-xl font-semibold text-white dark:text-white sm:text-2xl lg:text-xl xl:text-2xl">
           Admin
         </a>
-        <a
-          href="cms-awards.html"
+        <Link
+          Link href={route('cms.countries')}
           className="mx-8 flex py-2 text-base font-medium text-white hover:text-primary"
         >
           Content Management
-        </a>
+        </Link>
         <h1 className="mx-8 mt-8 mb-4 inline-block text-xl font-semibold text-white dark:text-white sm:text-2xl lg:text-xl xl:text-2xl">
           Region
         </h1>
@@ -327,7 +327,7 @@ export default function Home() {
             <div className="w-full px-10 md:w-1/2 lg:w-1/5">
               <div className="wow fadeInUp group mb-10" data-wow-delay=".1s">
                 <div className="mb-8 overflow-hidden rounded-[5px]">
-                  <Link href={route('detail.page')} className="block">  {/* Use Link instead of a */}
+                  <Link href={route('detail.page')} className="block">
                     <img
                       src={poster}
                       alt="image"

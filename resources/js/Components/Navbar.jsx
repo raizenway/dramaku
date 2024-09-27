@@ -73,7 +73,6 @@ export default function Navbar() {
               </div>
               <div className="hideOnMobile">
                 <a
-                // search result
                   href="/"
                   className=" px-5 py-3 text-base text-white transition duration-300 ease-in-out border rounded-md cursor-pointer border-white bg-dark hover:bg-white hover:text-dark"
                 >
@@ -85,13 +84,13 @@ export default function Navbar() {
           {/* autentikasi */}
           <div className="hideOnMobile sm:flex items-center mr-4">
             <a
-              href="/login" // Updated the link to the login page
+              href="/login"
               className="loginBtn px-[22px] py-2 text-base font-medium text-white hover:text-primary"
             >
               Login
             </a>
             <a
-              href="/register" // Updated the link to the register page
+              href="/register"
               className="signUpBtn rounded-md bg-white bg-opacity-20 px-6 py-2 text-base font-medium text-white duration-300 ease-in-out hover:bg-opacity-100 hover:text-dark"
             >
               Register
