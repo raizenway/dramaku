@@ -9,17 +9,16 @@ return new class extends Migration
     public function up()
     {
         Schema::create('movies', function (Blueprint $table) {
-            $table->id()->primary();
+            $table->id();
             $table->string('title', 255);
-            $table->string('alternative_title', 255);
+            $table->string('alternative_title', 255)->nullable();
             $table->text('photo_url');
             $table->integer('year');
-            $table->foreignId('country_id')->constraint('countries');
+            $table->foreignId('country_id')->constrained('countries');
             $table->text('synopsis');
-            $table->foreignId('release_statuses_id')->constraint('countries');
-            $table->foreignId('approval_statuses_id')->constraint('approval_statuses');
-            $table->text('link_trailer');
-            $table->foreignId('approved_by_id')->constraint('movies');
+            $table->foreignId('approval_status_id')->constrained('approval_statuses');
+            $table->text('link_trailer')->nullable();
+            $table->foreignId('approved_by_id')->nullable()->constrained('users');
             $table->timestamps();
         });
     }

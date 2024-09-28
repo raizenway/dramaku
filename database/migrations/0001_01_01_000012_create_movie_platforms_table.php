@@ -8,15 +8,16 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::create('countries', function (Blueprint $table) {
+        Schema::create('movie_platforms', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 255);
+            $table->foreignId('movie_id')->constrained('movies')->onDelete('cascade');
+            $table->foreignId('platform_id')->constrained('platforms')->onDelete('cascade');
             $table->timestamps();
         });
     }
 
     public function down()
     {
-        Schema::dropIfExists('countries');
+        Schema::dropIfExists('movie_platforms');
     }
 };

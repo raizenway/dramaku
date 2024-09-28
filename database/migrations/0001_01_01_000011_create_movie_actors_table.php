@@ -12,6 +12,7 @@ return new class extends Migration
             $table->id()->primary();
             $table->foreignId('movie_id')->constraint('movies');
             $table->foreignId('actor_id')->constraint('actors');
+            $table->timestamps();
         });
     } 
 
