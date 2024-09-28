@@ -8,8 +8,8 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::create('release_stasuses', function (Blueprint $table) {
-            $table->id()->primary();
+        Schema::create('platforms', function (Blueprint $table) {
+            $table->id();
             $table->string('name', 255);
             $table->timestamps();
         });
@@ -17,6 +17,7 @@ return new class extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('release_statuses');
+        Schema::dropIfExists('platforms');
     }
 };
+

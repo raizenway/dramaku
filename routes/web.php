@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\MovieController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -14,9 +15,9 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/detail-page', function () {
-    return Inertia::render('DetailPage');
-})->name('detail.page');
+
+Route::get('/movies/{id}', [MovieController::class, 'show'])->name('movies.show');
+
 
 Route::get('/cms-countries', function () {
     return Inertia::render('CMS/CMSCountries');
