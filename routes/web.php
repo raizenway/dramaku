@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\CountryController;
+use App\Http\Controllers\GenreController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\MovieController;
 use Illuminate\Foundation\Application;
@@ -15,13 +17,12 @@ Route::get('/', function () {
     ]);
 });
 
-
 Route::get('/movies/{id}', [MovieController::class, 'show'])->name('movies.show');
 
-
-Route::get('/cms-countries', function () {
-    return Inertia::render('CMS/CMSCountries');
-})->name('cms.countries');
+Route::get('/cms-countries', [CountryController::class, 'index'])->name('cms.countries');
+Route::post('/cms-countries', [CountryController::class, 'store'])->name('cms.countries.store');
+Route::put('/cms-countries/{country}', [CountryController::class, 'update'])->name('cms.countries.update');
+Route::delete('/cms-countries/{country}', [CountryController::class, 'destroy'])->name('cms.countries.destroy');
 
 Route::get('/cms-shows', function () {
     return Inertia::render('CMS/CMSShows');
@@ -32,24 +33,26 @@ Route::get('/cms-shows-validate', function () {
 })->name('cms.shows.validate');
 
 Route::get('/cms-show-input', function () {
-    return Inertia::render('CMS/CMSInputShows');
-})->name('cms.shows.input');
+    return Inertia::render('CMS/CMSInputShow');
+})->name('cms.show.input');
 
 Route::get('/cms-awards', function () {
     return Inertia::render('CMS/CMSAwards');
 })->name('cms.awards');
 
-Route::get('/cms-genres', function () {
-    return Inertia::render('CMS/CMSGenres');
-})->name('cms.genres');
+Route::get('/cms-genres', [GenreController::class, 'index'])->name('cms.genres');
+Route::post('/cms-genres', [GenreController::class, 'store'])->name('cms.genres.store');
+Route::put('/cms-genres/{genre}', [GenreController::class, 'update'])->name('cms.genres.update');
+Route::delete('/cms-genres/{genre}', [GenreController::class, 'destroy'])->name('cms.genres.destroy');
+
 
 Route::get('/cms-actors', function () {
     return Inertia::render('CMS/CMSActors');
 })->name('cms.actors');
 
-Route::get('/cms-comments', function () {
-    return Inertia::render('CMS/CMSComments');
-})->name('cms.comments');
+Route::get('/cms-reviews', function () {
+    return Inertia::render('CMS/CMSReviews');
+})->name('cms.reviews');
 
 Route::get('/cms-users', function () {
     return Inertia::render('CMS/CMSUsers');
