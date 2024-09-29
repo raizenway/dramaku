@@ -8,7 +8,7 @@ function showFilter () {
     const filterButton = document.querySelector('.filterButton');
     const hideFilterButton = document.querySelector('.hideFilterButton');
   
-    console.log(filterMobile, filterButton, hideFilterButton); // Cek apakah elemen ditemukan
+    console.log(filterMobile, filterButton, hideFilterButton);
   
     if (filterMobile && filterButton && hideFilterButton) {
       filterMobile.style.display = 'flex';
@@ -327,7 +327,7 @@ export default function Home() {
             <div className="w-full px-10 md:w-1/2 lg:w-1/5">
               <div className="wow fadeInUp group mb-10" data-wow-delay=".1s">
                 <div className="mb-8 overflow-hidden rounded-[5px]">
-                  <Link href={route('detail.page')} className="block">
+                  <Link /*href={route('detail.page')}*/ className="block">
                     <img
                       src={poster}
                       alt="image"
@@ -338,7 +338,7 @@ export default function Home() {
                 {/* title */}
                 <h3>
                   <Link
-                    href={route('detail.page')}  // Use Link here too
+                    /*href={route('detail.page')}*/
                     className="mb-4 inline-block text-xl font-semibold text-dark hover:text-primary dark:text-white dark:hover:text-primary sm:text-2xl lg:text-xl xl:text-2xl"
                   >
                     [Title]
@@ -397,7 +397,7 @@ export default function Home() {
             <div className="w-full px-10 md:w-1/2 lg:w-1/5">
               <div className="wow fadeInUp group mb-10" data-wow-delay=".1s">
                 <div className="mb-8 overflow-hidden rounded-[5px]">
-                  <Link href={route('detail.page')} className="block">  {/* Use Link instead of a */}
+                  <Link /*href={route('detail.page')}*/ className="block">  {/* Use Link instead of a */}
                       <img
                         src={poster}
                         alt="image"
@@ -467,7 +467,7 @@ export default function Home() {
             <div className="w-full px-10 md:w-1/2 lg:w-1/5">
               <div className="wow fadeInUp group mb-10" data-wow-delay=".1s">
                 <div className="mb-8 overflow-hidden rounded-[5px]">
-                  <Link href={route('detail.page')} className="block">  {/* Use Link instead of a */}
+                  <Link /*href={route('detail.page')}*/ className="block">  {/* Use Link instead of a */}
                     <img
                       src={poster}
                       alt="image"
@@ -537,7 +537,7 @@ export default function Home() {
             <div className="w-full px-10 md:w-1/2 lg:w-1/5">
               <div className="wow fadeInUp group mb-10" data-wow-delay=".1s">
                 <div className="mb-8 overflow-hidden rounded-[5px]">
-                  <Link href={route('detail.page')} className="block">  {/* Use Link instead of a */}
+                  <Link /*href={route('detail.page')}*/ className="block">  {/* Use Link instead of a */}
                     <img
                       src={poster}
                       alt="image"

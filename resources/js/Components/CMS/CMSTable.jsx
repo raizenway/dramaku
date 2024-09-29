@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 const CMSTable = ({ columns, data, actions }) => {
   return (
-    <div className="relative overflow-x-auto shadow-md rounded-lg mb-10">
+    <div className="relative overflow-x-auto shadow-md rounded-lg my-10">
       <table className="w-full">
         <thead className="text-white bg-dark-2 text-left">
           <tr>
