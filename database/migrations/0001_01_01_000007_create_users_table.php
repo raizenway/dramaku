@@ -15,10 +15,9 @@ return new class extends Migration
             $table->id()->primary();
             $table->string('name');
             $table->string('email')->unique();
-            $table->foreignId('role_id')->constrained('roles')->onDelete('cascade');
-            $table->string('google', 255);
-            $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('role');
+            $table->string('googleAuth', 255);
             $table->rememberToken();
             $table->timestamps();
         });

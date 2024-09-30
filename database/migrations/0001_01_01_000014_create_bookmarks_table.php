@@ -8,15 +8,16 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::create('roles', function (Blueprint $table) {
+        Schema::create('bookmarks', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 255);
+            $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('movie_id')->constrained('movies');
             $table->timestamps();
         });
     }
 
     public function down()
     {
-        Schema::dropIfExists('roles');
+        Schema::dropIfExists('bookmarks');
     }
 };

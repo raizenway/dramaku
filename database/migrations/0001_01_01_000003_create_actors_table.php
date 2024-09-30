@@ -12,8 +12,6 @@ return new class extends Migration
             $table->id();
             $table->string('name', 255)->nullable();
             $table->string('photo_url', 255)->nullable();
-            $table->date('birth_date')->nullable();
-            $table->foreignId('country_id')->constrained('countries')->onDelete('cascade');
             $table->timestamps();
         });
     }

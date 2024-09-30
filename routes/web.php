@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ActorController;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\GenreController;
 use App\Http\Controllers\ProfileController;
@@ -45,10 +46,10 @@ Route::post('/cms-genres', [GenreController::class, 'store'])->name('cms.genres.
 Route::put('/cms-genres/{genre}', [GenreController::class, 'update'])->name('cms.genres.update');
 Route::delete('/cms-genres/{genre}', [GenreController::class, 'destroy'])->name('cms.genres.destroy');
 
-
-Route::get('/cms-actors', function () {
-    return Inertia::render('CMS/CMSActors');
-})->name('cms.actors');
+Route::get('/cms-actors', [ActorController::class, 'index'])->name('cms.actors');
+Route::post('/cms-actors', [ActorController::class, 'store'])->name('cms.actors.store');
+Route::put('/cms-actors/{actor}', [ActorController::class, 'update'])->name('cms.actors.update');
+Route::delete('/cms-actors/{actor}', [ActorController::class, 'destroy'])->name('cms.actors.destroy');
 
 Route::get('/cms-reviews', function () {
     return Inertia::render('CMS/CMSReviews');
