@@ -16,9 +16,8 @@ return new class extends Migration
             $table->integer('year');
             $table->foreignId('country_id')->constrained('countries');
             $table->text('synopsis');
-            $table->foreignId('approval_status_id')->constrained('approval_statuses');
+            $table->integer('rating');
             $table->text('link_trailer')->nullable();
-            $table->foreignId('approved_by_id')->nullable()->constrained('users');
             $table->timestamps();
         });
     }

@@ -12,10 +12,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users');
             $table->foreignId('movie_id')->constrained('movies');
-            $table->integer('rate')->check('rate >= 1 and rate <= 5');
-            $table->text('comment');     
-            $table->foreignId('approval_status_id')->constrained('approval_statuses');
-            $table->foreignId('approved_by_id')->nullable()->constrained('users');
+            $table->integer('rate');
+            $table->text('comment');
             $table->timestamps();
         });
     }

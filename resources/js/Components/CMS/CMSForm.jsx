@@ -26,9 +26,6 @@ const CMSForm = ({ fields, onSubmit, initialValues = {} }) => {
       <div className="flex flex-wrap">
         {fields.map((field) => (
           <div key={field.id} className="mx-4 my-2">
-            <label htmlFor={field.id} className="block text-base mb-1">
-              {field.label}
-            </label>
             {field.type === "file" ? (
               <input
                 type="file"

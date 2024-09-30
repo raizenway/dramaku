@@ -1,5 +1,27 @@
 import React, { useState } from "react";
 
+const ProfilePictureCell = ({ imageUrl, name }) => {
+  const [isImageLoaded, setIsImageLoaded] = useState(true);
+
+  return (
+    <div className="h-28 w-20 overflow-hidden">
+      {isImageLoaded && imageUrl ? (
+        <img
+          src={imageUrl}
+          alt={name}
+          className="w-full h-full object-cover"
+          onLoad={() => setIsImageLoaded(true)}
+          onError={() => setIsImageLoaded(false)}
+        />
+      ) : (
+        <div className="h-28 w-20 bg-gray-200 flex items-center justify-center">
+          <span className="text-gray-500">No Image</span>
+        </div>
+      )}
+    </div>
+  );
+};
+
 const CMSTable = ({ columns, data, actions }) => {
   return (
     <div className="relative overflow-x-auto shadow-md rounded-lg my-10">
@@ -49,28 +71,6 @@ const CMSTable = ({ columns, data, actions }) => {
           )}
         </tbody>
       </table>
-    </div>
-  );
-};
-
-const ProfilePictureCell = ({ imageUrl, name }) => {
-  const [isImageLoaded, setIsImageLoaded] = useState(true);
-
-  return (
-    <div className="h-28 w-20 overflow-hidden">
-      {isImageLoaded && imageUrl ? (
-        <img
-          src={imageUrl}
-          alt={name}
-          className="w-full h-full object-cover"
-          onLoad={() => setIsImageLoaded(true)}
-          onError={() => setIsImageLoaded(false)}
-        />
-      ) : (
-        <div className="h-28 w-20 bg-gray-200 flex items-center justify-center">
-          <span className="text-gray-500">No Image</span>
-        </div>
-      )}
     </div>
   );
 };

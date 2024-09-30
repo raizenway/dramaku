@@ -1,4 +1,3 @@
-import poster1 from "../assets/images/blog/poster-1.jpg";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
@@ -25,7 +24,7 @@ function NotFound() {
               been moved or deleted.
             </p>
             <button
-              onClick={handleGoHome} // Set the click handler to redirect to home
+              onClick={handleGoHome}
               className="py-3 text-base font-medium text-white transition rounded-md bg-dark px-7 hover:bg-primary"
             >
               Go To Home
