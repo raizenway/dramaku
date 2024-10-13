@@ -6,11 +6,14 @@ import CastSection from "@/Components/Details/CastSection";
 import ReviewForm from "@/Components/Details/ReviewForm";
 import Navbar from "@/Components/Navbar";
 import Footer from "@/Components/Footer";
+import MovieCard from "@/Components/Home/MovieCard"
 import { Head, usePage } from '@inertiajs/react';
 import ReviewSection from "@/Components/Details/ReviewSection";
 
 export default function DetailPage() {
     const { movie } = usePage().props;
+
+    console.log("Movie Data:", movie);
 
     return (
         <>
