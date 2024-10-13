@@ -32,14 +32,10 @@ function MovieCard({ id, poster, title, year, genres, rating }) {
           </a>
         </h2>
         <div className="flex-wrap mt-1">
-          {genres.map((genre, index) => (
-            <a
-              key={index}
-              href="#"
-              className="mb-3 bg-primary/[0.08] inline-block rounded-[5px] px-4 py-0.5 text-center text-xs font-medium leading-loose text-dark hover:bg-primary hover:text-white"
-            >
-              {genre.name}
-            </a>
+        {genres.map((genre, index) => (
+          <a key={index} href="#" className="mb-3 bg-primary/[0.08] inline-block rounded-[5px] px-4 py-0.5 text-center text-xs font-medium leading-loose text-dark hover:bg-primary hover:text-white">
+            {genre}
+          </a>
           ))}
         </div>
         <div className="flex mt-1">

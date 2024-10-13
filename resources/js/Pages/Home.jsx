@@ -76,12 +76,9 @@ export default function Home() {
     const currentMovies = movies.slice(indexOfFirstMovie, indexOfLastMovie);
   
     const handlePageChange = (page) => {
-      if (page < 1 || page > totalPages) return; // Cek jika page valid
+      if (page < 1 || page > totalPages) return;
       setCurrentPage(page);
     };
-
-
-    console.log("Movie data:", movies);
 
     return (
     <>
