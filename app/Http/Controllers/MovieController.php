@@ -11,15 +11,15 @@ class MovieController extends Controller
 {
     public function show($id)
     {
-        $movie = Movie::with(['country', 'genres', 'actors', 'reviews', 'platforms'])
+        $movie = Movie::with(['country', 'genres', 'actors', 'reviews.user', 'platforms'])
             ->findOrFail($id);
 
         return Inertia::render('DetailPage', [
             'movie' => [
-                'title' => $movie->title,
+                'title' => $movie->title, 
                 'otherTitle' => $movie->alternative_title,
-                'year' => $movie->year,
-                'rating' => $movie->reviews->avg('rate') ?? 0,
+                'year' => $movie->year, 
+                'rating' => (int) ($movie->reviews->avg('rate') ?? 0),
                 'poster' => $movie->photo_url,
                 'trailerUrl' => $movie->link_trailer,
                 'genres' => $movie->genres->pluck('name'),
@@ -29,7 +29,6 @@ class MovieController extends Controller
                     return [
                         'name' => $actor->name,
                         'image' => $actor->photo_url,
-                        'role' => ''
                     ];
                 }),
                 'reviews' => $movie->reviews->map(function ($review) {
@@ -38,11 +37,9 @@ class MovieController extends Controller
                         'email' => $review->user->email,
                         'content' => $review->comment,
                         'rating' => $review->rate,
-                        'image' => $review->user->profile_image ?? null
                     ];
                 }),
             ]
         ]);
     }
 }
-
