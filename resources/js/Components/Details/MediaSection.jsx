@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 const MediaSection = ({ poster, trailerUrl }) => {
     const [isPosterBroken, setIsPosterBroken] = useState(false); // State to track if the poster is broken
+    console.log("MediaSection Poster URL:", poster);
 
     return (
         <div className="flex flex-wrap">

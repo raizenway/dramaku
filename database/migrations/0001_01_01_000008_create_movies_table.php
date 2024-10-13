@@ -16,7 +16,6 @@ return new class extends Migration
             $table->integer('year');
             $table->foreignId('country_id')->constrained('countries');
             $table->text('synopsis');
-            $table->integer('rating');
             $table->text('link_trailer')->nullable();
             $table->timestamps();
         });

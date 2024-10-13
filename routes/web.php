@@ -9,17 +9,26 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::get('/', function () {
-    return Inertia::render('Home', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
 
+Route::get('/', [MovieController::class, 'index'])->name('home');
+
+// Route::get('/', function () {
+//     return Inertia::render('Home', [
+//         'canLogin' => Route::has('login'),
+//         'canRegister' => Route::has('register'),
+//         'laravelVersion' => Application::VERSION,
+//         'phpVersion' => PHP_VERSION,
+//     ]);
+// });
+
+Route::get('/detail', function () {
+    return Inertia::render('DetailPage');
+})->name('detail');
+
+
+Route::get('/api/filters', [MovieController::class, 'getFilters']);
+Route::get('/filters', [MovieController::class, 'getFilters']);
 Route::get('/movies/{id}', [MovieController::class, 'show'])->name('movies.show');
-
 Route::get('/cms-countries', [CountryController::class, 'index'])->name('cms.countries');
 Route::post('/cms-countries', [CountryController::class, 'store'])->name('cms.countries.store');
 Route::put('/cms-countries/{country}', [CountryController::class, 'update'])->name('cms.countries.update');
