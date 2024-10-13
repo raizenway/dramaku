@@ -19,16 +19,16 @@ export default function DetailPage() {
             <section className="pt-24 md:pt-28">
                 <div className="container">
                     <MovieHeader
-                        title={movie.title}
-                        otherTitle={movie.otherTitle}
-                        year={movie.year}
-                        rating={movie.rating}
+                        title={movie.title || 'Untitled'}
+                        otherTitle={movie.otherTitle || ''}
+                        year={movie.year || 'N/A'}
+                        rating={movie.rating || 0}
                     />
                     <MediaSection poster={movie.poster} trailerUrl={movie.trailerUrl} />
-                    <GenreTags genres={movie.genres} />
-                    <SynopsisSection synopsis={movie.synopsis} platforms={movie.platforms} />
-                    <CastSection casts={movie.casts} />
-                    <ReviewSection reviews={movie.reviews} />
+                    {movie.genres && <GenreTags genres={movie.genres} />}
+                    {movie.synopsis && <SynopsisSection synopsis={movie.synopsis} platforms={movie.platforms || []} />}
+                    {movie.casts && <CastSection casts={movie.casts} />}
+                    {movie.reviews && <ReviewSection reviews={movie.reviews} />}
                     <ReviewForm />
                 </div>
             </section>
