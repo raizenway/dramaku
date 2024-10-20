@@ -10,7 +10,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }) {
     <div className="flex flex-row gap-4 justify-center">
       {/* Tombol Sebelumnya */}
       <a
-        href="javascript:void(0)"
+        href="#"
         onClick={() => onPageChange(currentPage - 1)}
         className={`mb-3 bg-primary/[0.08] inline-block rounded-[5px] p-4 text-center text-xs font-medium leading-loose text-dark hover:bg-primary hover:text-white ${
           currentPage === 1 ? 'pointer-events-none opacity-50' : ''
@@ -23,7 +23,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }) {
       {pageNumbers.map((number) => (
         <a
           key={number}
-          href="javascript:void(0)"
+          href="#"
           onClick={() => onPageChange(number)}
           className={`mb-3 bg-primary/[0.08] inline-block rounded-[5px] p-4 text-center text-xs font-medium leading-loose text-dark hover:bg-primary hover:text-white ${
             currentPage === number ? 'bg-primary hover:bg-primary/[0.08] text-dark-5 hover:text-dark-5' : ''
@@ -35,7 +35,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }) {
 
       {/* Tombol Selanjutnya */}
       <a
-        href="javascript:void(0)"
+        href="#"
         onClick={() => onPageChange(currentPage + 1)}
         className={`mb-3 bg-primary/[0.08] inline-block rounded-[5px] p-4 text-center text-xs font-medium leading-loose text-dark hover:bg-primary hover:text-white ${
           currentPage === totalPages ? 'pointer-events-none opacity-50' : ''

@@ -17,7 +17,7 @@ const Footer = () => {
           <div className="px-4 w-1/2 md:w-1/2 lg:w-4/12 xl:w-3/12">
             <div className="mb-10 w-full">
               <a
-                href="javascript:void(0)"
+                href="#"
                 className="mb-6 inline-block max-w-[160px]"
               >
                 <img src={logo} alt="logo" className="max-w-full" />

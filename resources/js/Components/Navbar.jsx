@@ -1,5 +1,7 @@
 import logo from "../../../public/images/logo.svg";
-import React from "react";
+import React, { useState } from "react";
+import Search from "./Search";
+import AutenthicationButton from "./AutenthicationButton";
 
 function showSearch(){
   const searchForm = document.querySelector('.searchForm')
@@ -42,64 +44,30 @@ closeButton.style.display = 'none'
 }
 
 
-export default function Navbar() {
+export default function Navbar({searchQuery, handleSearchChange}) {
+
   return (
     <div className="flex-col fixed header left-0 top-0 z-40 flex w-full items-center bg-dark">
-  {/* DESKTOP */}
-  <div className="flex items-center justify-between w-full">
-    <div className="flex items-center w-full">
-      {/* logo */}
-      <div className="w-60 max-w-full px-4 hideOnMobile">
-        <a href="/" className="navbar-logo block w-full py-5">
-          <img
-            src={logo}
-            alt="logo"
-            className="header-logo w-full"
-          />
-        </a>
-      </div>
-      {/* fitur */}
-      <div className="w-full">
-        <div className="flex w-full justify-between">
-          {/* form */}
-          <div>
-            <form className="flex items-center gap-3">
-              <div className="hideOnMobile">
-                <input
-                  type="text"
-                  placeholder="Masukkan judul"
-                  className="w-full px-10 py-3 text-base transition bg-transparent border rounded-md outline-none border-stroke dark:border-dark-3 text-white placeholder:text-dark-6 focus:border-primary dark:focus:border-primary focus-visible:shadow-none"
-                />
-              </div>
-              <div className="hideOnMobile">
-                <a
-                  href="/"
-                  className=" px-5 py-3 text-base text-white transition duration-300 ease-in-out border rounded-md cursor-pointer border-white bg-dark hover:bg-white hover:text-dark"
-                >
-                  Telusuri
-                </a>
-              </div>
-            </form>
+      <div className="flex items-center justify-between w-full">
+        <div className="flex items-center w-full">
+          <div className="w-60 max-w-full px-4 hideOnMobile">
+            <a href="/" className="navbar-logo block w-full py-5">
+              <img src={logo} alt="logo" className="header-logo w-full" />
+            </a>
           </div>
-          {/* autentikasi */}
-          <div className="hideOnMobile sm:flex items-center mr-4">
-            <a
-              href="/login"
-              className="loginBtn px-[22px] py-2 text-base font-medium text-white hover:text-primary"
-            >
-              Login
-            </a>
-            <a
-              href="/register"
-              className="signUpBtn rounded-md bg-white bg-opacity-20 px-6 py-2 text-base font-medium text-white duration-300 ease-in-out hover:bg-opacity-100 hover:text-dark"
-            >
-              Register
-            </a>
+          <div className="w-full">
+            <div className="flex w-full justify-between">
+              <Search
+                searchQuery={searchQuery}
+                handleSearchChange={handleSearchChange}
+              />
+              <AutenthicationButton />
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
+
+  
   {/* MOBILE */}
   <div className="flex items-center w-full">
     <div className="flex items-center w-full">
