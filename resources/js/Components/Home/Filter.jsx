@@ -17,20 +17,32 @@ const [selectedFilter, setSelectedFilter] = useState({
   award: '',
 });
 
+const filterOptions = {
+  year: 'years',
+  genre: 'genres',
+  availability: 'availability',
+  award: 'awards',
+};
+
+
+
   // Ambil data filter dari backend
   useEffect(() => {
     axios.get('/api/filters')
       .then((response) => {
+        console.log('Filters data:', response.data); // Debugging log
         setFilters(response.data);
       })
       .catch((error) => {
         console.error('Error fetching filters:', error);
       });
   }, []);
+  
 
   // Handle perubahan input filter
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+    console.log(`Filter Changed: ${name} = ${value}`);
     setSelectedFilter((prev) => ({ ...prev, [name]: value }));
   };
 
@@ -46,20 +58,18 @@ const [selectedFilter, setSelectedFilter] = useState({
       <div className="hideOnMobile">
         <div className="w-full px-4">
           <div className="mb-7 mt-12 text-center">
-            <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit}>
             <div className="flex gap-1">
-              {['years', 'genres', 'availability', 'awards'].map((filter) => (
+              {Object.keys(filterOptions).map((filter) => (
                 <select
                   key={filter}
-                  id={filter}
                   name={filter}
-                  className="flex-grow mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm bg-white dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                  defaultValue=""
+                  value={selectedFilter[filter]}
+                  onChange={handleInputChange}
+                  className="flex-grow mt-1 block w-full py-2 px-3 border rounded-md"
                 >
-                  <option value="" disabled>
-                    {filter.charAt(0).toUpperCase() + filter.slice(1)}
-                  </option>
-                  {filters[filter]?.map((option, index) => (
+                  <option value="">{filter.charAt(0).toUpperCase() + filter.slice(1)}</option>
+                  {filters[filterOptions[filter]]?.map((option, index) => (
                     <option key={index} value={option}>
                       {option}
                     </option>
@@ -67,12 +77,10 @@ const [selectedFilter, setSelectedFilter] = useState({
                 </select>
               ))}
             </div>
-              <div className="flex pt-2 justify-center mb-10">
-                <button type="submit" className="w-64 mt-3 px-5 p-3 text-base text-white text-center transition duration-300 ease-in-out border rounded-md cursor-pointer border-white bg-dark hover:bg-blue-dark">
-                  Submit
-                </button>
-              </div>
-            </form>
+            <button type="submit" className="w-64 mt-3 px-5 p-3 text-white bg-dark">
+              Submit
+            </button>
+          </form>
           </div>
         </div>
       </div>

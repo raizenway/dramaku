@@ -28,8 +28,8 @@ class MovieController extends Controller
 
 public function index()
     {
-        $movies = Movie::with(['genres', 'country', 'reviews', 'actors'])->get();
-
+        $movies = Movie::with(['genres', 'country', 'reviews', 'actors', 'platforms', 'awards'])->get();
+        
         $movies = $movies->map(function ($movie) {
             
             return [
@@ -42,10 +42,10 @@ public function index()
                 'genres' => $movie->genres->pluck('name'),
                 'country' => $movie->country->name,
                 'actors' => $movie->actors->pluck('name'),
+                'availability' => $movie->platforms->pluck('name'),
+                'awards' => $movie->awards->pluck('name')
             ];
         });
-
-        // dd($movies);
 
         return Inertia::render('Home', [
             'movies' => $movies      

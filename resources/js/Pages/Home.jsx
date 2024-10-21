@@ -6,15 +6,20 @@ import MovieCard from "../Components/Home/MovieCard";
 import Sidebar from '../Components/Home/Sidebar';
 import Filter from "../Components/Home/Filter";
 import Pagination from '../Components/Home/Pagination';
-import axios from "axios";
 
 
 export default function Home() {
   const { movies } = usePage().props;
 
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
   const [filteredMovies, setFilteredMovies] = useState(movies);
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedFilter, setSelectedFilter] = useState({
+    year: '',
+    genre: '',
+    availability: '',
+    award: ''
+  });
   const itemsPerPage = 5;
 
   const totalPages = Math.ceil(filteredMovies.length / itemsPerPage);
@@ -31,21 +36,36 @@ export default function Home() {
     setSearchQuery(e.target.value);
   };
 
-  console.log("Movies:", movies);
+  const handleFilterSubmit = (filter) => {
+    setSelectedFilter(filter);
+    setCurrentPage(1);
+  };
 
   useEffect(() => {
     if (!movies || movies.length === 0) return;
-  
-    const filtered = movies.filter((movie) =>
-      movie.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      movie.actors.some((actor) =>
-        actor.toLowerCase().includes(searchQuery.toLowerCase())
-      )
-    );
-  
+
+    const filtered = movies.filter((movie) => {
+      const matchesSearch =
+        movie.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        movie.actors.some((actor) =>
+          actor.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+
+      const matchesFilter =
+        (!selectedFilter.year || movie.year === parseInt(selectedFilter.year)) &&
+        (!selectedFilter.genre || movie.genres.includes(selectedFilter.genre)) &&
+        (!selectedFilter.availability || movie.availability.includes(selectedFilter.availability)) &&
+        (!selectedFilter.award ||
+          (selectedFilter.award === 'Yes' && movie.awards.length > 0) || 
+          (selectedFilter.award === 'No' && movie.awards.length === 0));
+
+      return matchesSearch && matchesFilter;
+    });
+
     setFilteredMovies(filtered);
-    setCurrentPage(1);
-  }, [searchQuery, movies]);
+  }, [searchQuery, selectedFilter, movies]);
+
+  console.log("Movies:", movies);
 
   return (
     <>
@@ -54,7 +74,7 @@ export default function Home() {
         <Sidebar />
         <div className="w-11/12 pb-10 lg:pb-20">
           <div className="container mx-auto">
-            <Filter onFilterSubmit={() => {}} />
+            <Filter onFilterSubmit={handleFilterSubmit} />
             <div className="-mx-4 flex flex-wrap mt-14">
               {currentMovies.length > 0 ? (
                 currentMovies.map((movie) => (

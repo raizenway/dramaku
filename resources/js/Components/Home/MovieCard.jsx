@@ -2,9 +2,12 @@ import { Link } from 'react-router-dom';
 
 function MovieCard({ id, poster, title, year, genres, rating }) {
     const displayRating = rating === null ? 0 : rating;
+    const handleCardClick = () => {
+      window.location.href = `/movies/${id}`;
+    };
  
     return (
-    <div className="w-full px-10 md:w-1/2 lg:w-1/5">
+    <div className="w-full px-10 md:w-1/2 lg:w-1/5" onClick={handleCardClick}>
       <div className="wow fadeInUp group mb-10" data-wow-delay=".1s">
         <div className="mb-8 overflow-hidden rounded-[5px]">
           <Link to={`/movies/${id}`} className="block">
