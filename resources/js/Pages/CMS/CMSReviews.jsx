@@ -1,54 +1,71 @@
-import React from "react";
-import CMSLayout from "@/Components/CMS/CMSLayout";
-import CMSTable from "@/Components/CMS/CMSTable";
+  import React, { useState } from "react";
+  import CMSLayout from "@/Components/CMS/CMSLayout";
+  import CMSTable from "@/Components/CMS/CMSTable";
+  import Pagination from "@/Components/Home/Pagination";
+  import { usePage } from "@inertiajs/react";
 
-const Reviews = () => {
-  const commentColumns = [
-    { id: "username", title: "Username", width: "w-2/12" },
-    { id: "rate", title: "Rate", width: "w-2/12" },
-    { id: "shows", title: "Shows", width: "w-2/12" },
-    { id: "comment", title: "Comment", width: "w-fit" },
-    { id: "status", title: "Status", width: "w-2/12" },
-  ];
+  const CMSReviews = () => {
+    const { reviews } = usePage().props;
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 5;
 
-  const ReviewsData = [
-    { username: "User 1", rate: "5", shows: "Show 1", comment: "Amazing show!", status: "Approved" },
-    { username: "User 2", rate: "3", shows: "Show 2", comment: "It was okay.", status: "Approved" },
-    { username: "User 3", rate: "4", shows: "Show 3", comment: "I enjoyed it!", status: "Unapproved" },
-  ];
+    const totalPages = Math.ceil((reviews?.length || 0) / itemsPerPage);
 
-  const actions = [
-    {
-      label: "Approve",
-      className: "text-primary hover:underline px-1",
-      onClick: (item) => console.log("Approve clicked for", item),
-    },
-    {
-      label: "Delete",
-      className: "text-red-500 hover:underline px-1",
-      onClick: (item) => console.log("Delete clicked for", item),
-    },
-  ];
+    const indexOfLastReview = currentPage * itemsPerPage;
+    const indexOfFirstReview = indexOfLastReview - itemsPerPage;
+    
+    const currentReviews = reviews?.slice(indexOfFirstReview, indexOfLastReview) || [];
 
-  return (
-    <CMSLayout title="Reviews">
-      <CMSTable columns={commentColumns} data={ReviewsData} actions={actions} />
-      <div className="m-4 w-full flex gap-8">
-        <button
-          className="text-white inline-flex items-center justify-center py-2 text-base font-medium text-center rounded-md bg-primary px-7 hover:bg-blue-dark"
-          onClick={() => console.log("Approve selected reviews")}
-        >
-          Approve
-        </button>
-        <button
-          className="text-white inline-flex items-center justify-center py-2 text-base font-medium text-center rounded-md bg-red-600 px-7 hover:bg-red-800"
-          onClick={() => console.log("Delete selected reviews")}
-        >
-          Delete
-        </button>
-      </div>
-    </CMSLayout>
-  );
-};
+    const handlePageChange = (page) => {
+      if (page < 1 || page > totalPages) return;
+      setCurrentPage(page);
+    };
 
-export default Reviews;
+    const commentColumns = [
+      { id: "username", title: "Username", width: "w-2/12" },
+      { id: "rate", title: "Rate", width: "w-2/12" },
+      { id: "shows", title: "Shows", width: "w-2/12" },
+      { id: "comment", title: "Comment", width: "w-fit" },
+      { id: "status", title: "Status", width: "w-1/12" },
+    ];
+
+    const reviewData = currentReviews.map((review) => ({
+      username: review.user?.name || "Unknown User",
+      rate: review.rate,
+      shows: review.movie?.title || "Unknown Movie",
+      comment: review.comment,
+      status: "Approved",
+    }));
+
+    const actions = [
+      {
+        label: "Rename",
+        className: "text-primary hover:underline px-1",
+        onClick: (item) => handleRename(item),
+      },
+      {
+        label: "Delete",
+        className: "text-red-500 hover:underline px-1",
+        onClick: (item) => handleDelete(item),
+      },
+    ];
+
+    return (
+      <CMSLayout title="Reviews">
+        <CMSTable 
+          columns={commentColumns} 
+          data={reviewData} 
+          actions={actions}
+          currentPage={currentPage}
+          itemsPerPage={itemsPerPage}
+        />
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
+      </CMSLayout>
+    );
+  };
+
+  export default CMSReviews;

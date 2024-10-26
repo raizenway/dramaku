@@ -3,10 +3,20 @@ import { usePage, router as Inertia } from '@inertiajs/react';
 import CMSLayout from '@/Components/CMS/CMSLayout';
 import CMSForm from '@/Components/CMS/CMSForm';
 import CMSTable from '@/Components/CMS/CMSTable';
+import Pagination from '@/Components/Home/Pagination';
 
 const CMSCountries = () => {
   const { countries } = usePage().props;
   const [countryList, setCountryList] = useState(countries);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
+  const totalPages = Math.ceil(countryList.length / itemsPerPage);
+
+  const indexOfLastCountry = currentPage * itemsPerPage;
+  const indexOfFirstCountry = indexOfLastCountry - itemsPerPage;
+  const currentCountries = countryList.slice(indexOfFirstCountry, indexOfLastCountry);
 
   const formFields = [
     { id: 'country', placeholder: 'Country Name', label: 'Country' }
@@ -75,10 +85,28 @@ const CMSCountries = () => {
     }
   };
 
+  const handlePageChange = (page) => {
+    if (page < 1 || page > totalPages) return;
+    setCurrentPage(page);
+  };
+
   return (
     <CMSLayout title="Countries">
       <CMSForm fields={formFields} onSubmit={handleSubmit} />
-      <CMSTable columns={columns} data={countryList} actions={actions} />
+      
+      <CMSTable 
+        columns={columns} 
+        data={currentCountries} 
+        actions={actions}
+        currentPage={currentPage}
+        itemsPerPage={itemsPerPage}
+      />
+      
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+      />
     </CMSLayout>
   );
 };

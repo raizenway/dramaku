@@ -18,7 +18,7 @@ const MovieHeader = ({ title, otherTitle, year, rating }) => {
                 <img src={starIcon} alt="star icon" className="w-10 h-10" />
                 <div className="ml-2 flex flex-col items-center">
                     <p className="text-base font-bold text-body-color">Rating</p>
-                    <span className="text-xl text-body-color">{displayRating} / 10</span>
+                    <span className="text-xl text-body-color">{displayRating.toFixed(1)} / 10</span>
                 </div>
             </div>
         </div>

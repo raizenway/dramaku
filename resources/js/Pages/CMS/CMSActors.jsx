@@ -3,16 +3,46 @@ import { usePage, router as Inertia } from '@inertiajs/react';
 import CMSLayout from "@/Components/CMS/CMSLayout";
 import CMSForm from "@/Components/CMS/CMSForm";
 import CMSTable from "@/Components/CMS/CMSTable";
+import Pagination from '@/Components/Home/Pagination';
 
 const CMSActors = () => {
   const { actors } = usePage().props;
   const [actorList, setActorList] = useState(actors);
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
+  const totalPages = Math.ceil(actorList.length / itemsPerPage);
+
+  const indexOfLastActor = currentPage * itemsPerPage;
+  const indexOfFirstActor = indexOfLastActor - itemsPerPage;
+  const currentActors = actorList.slice(indexOfFirstActor, indexOfLastActor);
+
   const actorFields = [
     { id: "name", label: "Actor's Name", type: "text", placeholder: "Actor's Name" },
-    { id: "country_id", label: "Actor's Country", type: "text", placeholder: "Country ID" },
+    { id: "country", label: "Actor's Country", type: "text", placeholder: "Country" },
     { id: "birth_date", label: "Actor's Date of Birth", type: "date" },
     { id: "photo_url", label: "Profile Picture URL", type: "text", placeholder: "Actor's Picture URL" },
+  ];
+
+  const columns = [
+    { id: 'photo_url', title: "Photo" },  // Column for image
+    { id: 'name', title: "Name" },
+    { id: 'country', title: "Country" },
+    { id: 'birth_date', title: "Date of Birth" },
+  ];
+
+  const actions = [
+    {
+      label: "Rename",
+      className: "text-primary hover:underline px-1",
+      onClick: (item) => handleRename(item),
+    },
+    {
+      label: "Delete",
+      className: "text-red-500 hover:underline px-1",
+      onClick: (item) => handleDelete(item),
+    },
   ];
 
   const handleActorSubmit = (formData) => {
@@ -61,28 +91,28 @@ const CMSActors = () => {
     }
   };
 
-  const actorColumns = [
-    { id: 'photo_url', title: 'Photo', width: 'w-2/12' },
-    { id: 'name', title: 'Name' },
-    { id: 'country.name', title: 'Country' },
-    { id: 'birth_date', title: 'Date of Birth' },
-];
+  const handlePageChange = (page) => {
+    if (page < 1 || page > totalPages) return;
+    setCurrentPage(page);
+  };
 
   return (
     <CMSLayout title="Actors">
       <CMSForm fields={actorFields} onSubmit={handleActorSubmit} />
-      <CMSTable columns={actorColumns} data={actorList} actions={[
-        {
-          label: "Rename",
-          className: "text-primary hover:underline px-1",
-          onClick: (item) => handleRename(item),
-        },
-        {
-          label: "Delete",
-          className: "text-red-500 hover:underline px-1",
-          onClick: (item) => handleDelete(item),
-        }
-      ]} />
+      
+      <CMSTable 
+        columns={columns} 
+        data={currentActors} 
+        actions={actions}
+        currentPage={currentPage}
+        itemsPerPage={itemsPerPage}
+      />
+      
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+      />
     </CMSLayout>
   );
 };
