@@ -35,7 +35,7 @@ class MovieController extends Controller
                 'title' => $movie->title,
                 'otherTitle' => $movie->alternative_title,
                 'year' => $movie->year,
-                'rating' => $movie->reviews->avg('rate') ?? 0,
+                'rating' => ($movie->reviews->avg('rate') ?? 0),
                 'photo_url' => $movie->photo_url,
                 'genres' => $movie->genres->pluck('name'),
                 'country' => $movie->country->name,
@@ -51,9 +51,10 @@ class MovieController extends Controller
     {
         $movie = Movie::with(['country', 'genres', 'actors', 'reviews.user', 'platforms'])
             ->findOrFail($id);
-
+    
         return Inertia::render('DetailPage', [
             'movie' => [
+                'id' => $movie->id,
                 'title' => $movie->title, 
                 'otherTitle' => $movie->alternative_title,
                 'year' => $movie->year, 
@@ -80,4 +81,5 @@ class MovieController extends Controller
             ]
         ]);
     }
+    
 }

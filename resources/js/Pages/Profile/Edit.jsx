@@ -1,4 +1,5 @@
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import Navbar from "@/Components/Navbar";
+import Footer from "@/Components/Footer";
 import DeleteUserForm from './Partials/DeleteUserForm';
 import UpdatePasswordForm from './Partials/UpdatePasswordForm';
 import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm';
@@ -6,30 +7,33 @@ import { Head } from '@inertiajs/react';
 
 export default function Edit({ mustVerifyEmail, status }) {
     return (
-        <AuthenticatedLayout
-            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Profile</h2>}
-        >
+        <>
             <Head title="Profile" />
+            <Navbar />
+            <section className="py-24 md:py-28">
+                <div className="container mx-auto">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div className="space-y-6">
+                            <div className="bg-gray-100 p-6 rounded-lg shadow">
+                                <UpdateProfileInformationForm
+                                    mustVerifyEmail={mustVerifyEmail}
+                                    status={status}
+                                    className="max-w-xl"
+                                />
+                            </div>
 
-            <div className="py-12">
-                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-                    <div className="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                        <UpdateProfileInformationForm
-                            mustVerifyEmail={mustVerifyEmail}
-                            status={status}
-                            className="max-w-xl"
-                        />
-                    </div>
+                            <div className="bg-gray-100 p-6 rounded-lg shadow">
+                                <UpdatePasswordForm className="max-w-xl" />
+                            </div>
+                        </div>
 
-                    <div className="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                        <UpdatePasswordForm className="max-w-xl" />
-                    </div>
-
-                    <div className="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                        <DeleteUserForm className="max-w-xl" />
+                        <div className="bg-gray-100 p-6 rounded-lg shadow">
+                            <DeleteUserForm className="max-w-xl" />
+                        </div>
                     </div>
                 </div>
-            </div>
-        </AuthenticatedLayout>
+            </section>
+            <Footer />
+        </>
     );
 }

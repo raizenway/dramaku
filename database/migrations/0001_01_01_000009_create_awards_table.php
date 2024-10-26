@@ -11,6 +11,8 @@ return new class extends Migration
         Schema::create('awards', function (Blueprint $table) {
             $table->id();
             $table->string('name', 255);
+            $table->foreignId('country_id')->constrained('countries')->onDelete('cascade');
+            $table->year('year');
             $table->foreignId('movie_id')->nullable()->constrained('movies')->onDelete('cascade');
             $table->timestamps();
         });

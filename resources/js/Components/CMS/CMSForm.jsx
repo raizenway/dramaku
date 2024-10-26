@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Dropdown from "@/Components/Dropdown";
 
 const CMSForm = ({ fields, onSubmit, initialValues = {} }) => {
   const [formData, setFormData] = useState(
@@ -16,6 +17,13 @@ const CMSForm = ({ fields, onSubmit, initialValues = {} }) => {
     });
   };
 
+  const handleDropdownChange = (id, value) => {
+    setFormData({
+      ...formData,
+      [id]: value,
+    });
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     onSubmit(formData);
@@ -25,20 +33,29 @@ const CMSForm = ({ fields, onSubmit, initialValues = {} }) => {
     <form onSubmit={handleSubmit} className="bg-gray-100 p-4 rounded-lg">
       <div className="flex flex-wrap">
         {fields.map((field) => (
-          <div key={field.id} className="mx-4 my-2">
-            {field.type === "file" ? (
+          <div key={field.id} className="w-full sm:w-1/2 lg:w-1/4 mx-4 my-2">
+            {field.type === "file" ? (  
               <input
                 type="file"
                 id={field.id}
                 className="block w-full text-base border border-gray-400 rounded-lg cursor-pointer bg-gray-50"
                 onChange={handleChange}
               />
+            ) : field.type === "searchable-select" ? (
+              <Dropdown
+                id={field.id}
+                options={field.options}
+                value={formData[field.id]}
+                className="w-full text-base text-body-color border border-gray-400 rounded-lg p-2 px-4"
+                onChange={(e) => handleDropdownChange(field.id, e.target.value)}
+                placeholder={field.placeholder}
+              />
             ) : (
               <input
                 type={field.type}
                 id={field.id}
                 placeholder={field.placeholder}
-                className="text-base text-body-color dark:text-dark-6 border border-gray-400 rounded-lg p-2"
+                className="w-full text-base text-body-color border border-gray-400 rounded-lg p-2"
                 value={formData[field.id]}
                 onChange={handleChange}
               />

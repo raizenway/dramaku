@@ -65,7 +65,7 @@ export default function Home() {
 
     // Pagination logic
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 2; // Menampilkan satu item per halaman
+    const itemsPerPage = 15; // Menampilkan satu item per halaman
   
     // Menghitung total pages
     const totalPages = Math.ceil(movies.length / itemsPerPage);
@@ -86,7 +86,7 @@ export default function Home() {
       <div className="flex mt-16 justify-center">
       <Sidebar />
       {/* konten */}
-      <div className="w-11/12 pb-10 lg:pb-20 lg:pt-[]">
+      <div className="w-10/12 pb-10 lg:pb-20 lg:pt-[]">
         <div className="container mx-auto">
           <Filter
           showFilter={showFilter}
@@ -110,9 +110,10 @@ export default function Home() {
         </div>
         {/* Pagination */}
         <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={handlePageChange}/>
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
       </div>
         </div>
         < Footer />

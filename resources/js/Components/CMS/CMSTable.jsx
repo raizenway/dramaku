@@ -4,7 +4,7 @@ const ProfilePictureCell = ({ imageUrl, name }) => {
   const [isImageLoaded, setIsImageLoaded] = useState(true);
 
   return (
-    <div className="h-28 w-20 overflow-hidden">
+    <div className="h-28 w-20 overflow-hidden rounded border">
       {isImageLoaded && imageUrl ? (
         <img
           src={imageUrl}
@@ -22,7 +22,7 @@ const ProfilePictureCell = ({ imageUrl, name }) => {
   );
 };
 
-const CMSTable = ({ columns, data, actions }) => {
+const CMSTable = ({ columns, data, actions, currentPage, itemsPerPage }) => {
   return (
     <div className="relative overflow-x-auto shadow-md rounded-lg my-10">
       <table className="w-full">
@@ -47,10 +47,12 @@ const CMSTable = ({ columns, data, actions }) => {
           ) : (
             data.map((item, index) => (
               <tr key={index} className="border-b hover:bg-gray-100">
-                <th scope="row" className="px-2 py-4 text-center">{index + 1}</th>
+                <th scope="row" className="px-2 py-4 text-center">
+                  {index + 1 + (currentPage - 1) * itemsPerPage}
+                </th>
                 {columns.map((column) => (
                   <td key={column.id} className="px-2 py-4">
-                    {column.id === 'profilePicture' ? (
+                    {column.id === 'photo_url' ? (
                       <ProfilePictureCell imageUrl={item[column.id]} name={item.name} />
                     ) : (
                       item[column.id]
