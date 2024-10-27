@@ -1,14 +1,38 @@
 import React from 'react';
 
 export default function Pagination({ currentPage, totalPages, onPageChange }) {
-  const pageNumbers = [];
-  for (let i = 1; i <= totalPages; i++) {
-    pageNumbers.push(i);
-  }
+  const getPageNumbers = () => {
+    const maxPagesToShow = 5;
+    let startPage, endPage;
+
+    if (totalPages <= maxPagesToShow) {
+      startPage = 1;
+      endPage = totalPages;
+    } else {
+      if (currentPage <= Math.ceil(maxPagesToShow / 2)) {
+        startPage = 1;
+        endPage = maxPagesToShow;
+      } else if (currentPage + Math.floor(maxPagesToShow / 2) >= totalPages) {
+        startPage = totalPages - maxPagesToShow + 1;
+        endPage = totalPages;
+      } else {
+        startPage = currentPage - Math.floor(maxPagesToShow / 2);
+        endPage = currentPage + Math.floor(maxPagesToShow / 2);
+      }
+    }
+
+    const pageNumbers = [];
+    for (let i = startPage; i <= endPage; i++) {
+      pageNumbers.push(i);
+    }
+    return pageNumbers;
+  };
+
+  const pageNumbers = getPageNumbers();
 
   return (
     <div className="flex flex-row gap-4 justify-center">
-      {/* Tombol Sebelumnya */}
+      {/* Previous Button */}
       <a
         href="#"
         onClick={() => onPageChange(currentPage - 1)}
@@ -19,7 +43,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }) {
         &lt;
       </a>
 
-      {/* Nomor Halaman */}
+      {/* Page Numbers */}
       {pageNumbers.map((number) => (
         <a
           key={number}
@@ -33,7 +57,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }) {
         </a>
       ))}
 
-      {/* Tombol Selanjutnya */}
+      {/* Next Button */}
       <a
         href="#"
         onClick={() => onPageChange(currentPage + 1)}

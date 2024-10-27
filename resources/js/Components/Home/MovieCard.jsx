@@ -1,6 +1,8 @@
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { Link } from '@inertiajs/react';
 
 function MovieCard({ id, poster, title, year, genres, rating }) {
+    const [isPosterBroken, setIsPosterBroken] = useState(false);
     const displayRating = rating === null ? 0 : rating;
     const handleCardClick = () => {
       window.location.href = `/movies/${id}`;
@@ -46,9 +48,7 @@ function MovieCard({ id, poster, title, year, genres, rating }) {
             Rate {displayRating}/10
           </p>
         </div>
-      </div>
-    </div>
-  );
+    );
 }
 
 export default MovieCard;

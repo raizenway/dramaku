@@ -15,7 +15,6 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
 
     const submit = (e) => {
         e.preventDefault();
-
         patch(route('profile.update'));
     };
 
@@ -23,79 +22,74 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
         <section className={className}>
             <header>
                 <h2 className="text-lg font-medium text-gray-900">Profile Information</h2>
-
-                <p className="mt-1 text-sm text-gray-600">
+                <p className="text-base text-body-color">
                     Update your account's profile information and email address.
                 </p>
             </header>
 
-            <form onSubmit={submit} className="mt-6 space-y-6">
-                <div>
-                    <InputLabel htmlFor="name" value="Name" />
+            <form onSubmit={submit} className="bg-gray-100 p-4 rounded-lg">
+                <div className="flex flex-wrap">
+                    <div className="mx-4 my-2 w-full">
+                        <input
+                            type="text"
+                            id="name"
+                            placeholder="Name"
+                            className="block w-full text-base border border-gray-400 rounded-lg p-2"
+                            value={data.name}
+                            onChange={(e) => setData('name', e.target.value)}
+                            required
+                            autoComplete="name"
+                        />
+                        <InputError className="mt-2" message={errors.name} />
+                    </div>
 
-                    <TextInput
-                        id="name"
-                        className="mt-1 block w-full"
-                        value={data.name}
-                        onChange={(e) => setData('name', e.target.value)}
-                        required
-                        isFocused
-                        autoComplete="name"
-                    />
+                    <div className="mx-4 my-2 w-full">
+                        <input
+                            type="email"
+                            id="email"
+                            placeholder="Email"
+                            className="block w-full text-base border border-gray-400 rounded-lg p-2"
+                            value={data.email}
+                            onChange={(e) => setData('email', e.target.value)}
+                            required
+                            autoComplete="username"
+                        />
+                        <InputError className="mt-2" message={errors.email} />
+                    </div>
 
-                    <InputError className="mt-2" message={errors.name} />
-                </div>
+                    {mustVerifyEmail && user.email_verified_at === null && (
+                        <div className="mx-4 my-2 w-full">
+                            <p className="text-sm mt-2 text-gray-800">
+                                Your email address is unverified.
+                                <Link
+                                    href={route('verification.send')}
+                                    method="post"
+                                    as="button"
+                                    className="underline text-sm text-gray-600 hover:text-gray-900"
+                                >
+                                    Click here to re-send the verification email.
+                                </Link>
+                            </p>
+                            {status === 'verification-link-sent' && (
+                                <div className="mt-2 font-medium text-sm text-green-600">
+                                    A new verification link has been sent to your email address.
+                                </div>
+                            )}
+                        </div>
+                    )}
 
-                <div>
-                    <InputLabel htmlFor="email" value="Email" />
-
-                    <TextInput
-                        id="email"
-                        type="email"
-                        className="mt-1 block w-full"
-                        value={data.email}
-                        onChange={(e) => setData('email', e.target.value)}
-                        required
-                        autoComplete="username"
-                    />
-
-                    <InputError className="mt-2" message={errors.email} />
-                </div>
-
-                {mustVerifyEmail && user.email_verified_at === null && (
-                    <div>
-                        <p className="text-sm mt-2 text-gray-800">
-                            Your email address is unverified.
-                            <Link
-                                href={route('verification.send')}
-                                method="post"
-                                as="button"
-                                className="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                            >
-                                Click here to re-send the verification email.
-                            </Link>
-                        </p>
-
-                        {status === 'verification-link-sent' && (
-                            <div className="mt-2 font-medium text-sm text-green-600">
-                                A new verification link has been sent to your email address.
-                            </div>
+                    <div className="mx-4 my-2 w-full">
+                        <button
+                            type="submit"
+                            className="text-white inline-flex items-center justify-center py-2 text-base font-medium rounded-md bg-primary px-7 hover:bg-blue-dark"
+                            disabled={processing}
+                        >
+                            Save
+                        </button>
+                        {recentlySuccessful && (
+                            <p className="text-sm text-gray-600 ml-4">Saved.</p>
                         )}
                     </div>
-                )}
-
-                <div className="flex items-center gap-4">
-                    <PrimaryButton disabled={processing}>Save</PrimaryButton>
-
-                    <Transition
-                        show={recentlySuccessful}
-                        enter="transition ease-in-out"
-                        enterFrom="opacity-0"
-                        leave="transition ease-in-out"
-                        leaveTo="opacity-0"
-                    >
-                        <p className="text-sm text-gray-600">Saved.</p>
-                    </Transition>
                 </div>
             </form>
         </section>

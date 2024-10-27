@@ -37,7 +37,7 @@ public function index()
                 'title' => $movie->title,
                 'otherTitle' => $movie->alternative_title,
                 'year' => $movie->year,
-                'rating' => $movie->reviews->avg('rate') ?? 0,
+                'rating' => ($movie->reviews->avg('rate') ?? 0),
                 'photo_url' => $movie->photo_url,
                 'genres' => $movie->genres->pluck('name'),
                 'country' => $movie->country->name,
@@ -58,9 +58,10 @@ public function index()
     {
         $movie = Movie::with(['country', 'genres', 'actors', 'reviews.user', 'platforms'])
             ->findOrFail($id);
-
+    
         return Inertia::render('DetailPage', [
             'movie' => [
+                'id' => $movie->id,
                 'title' => $movie->title, 
                 'otherTitle' => $movie->alternative_title,
                 'year' => $movie->year, 
@@ -87,4 +88,5 @@ public function index()
             ]
         ]);
     }
+    
 }
