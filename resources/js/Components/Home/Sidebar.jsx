@@ -14,49 +14,37 @@ export default function Sidebar({ user }) {
   return (
     <>
       {/* DESKTOP SIDEBAR */}
-      <div className="hideOnMobile w-2/12 bg-dark hide flex flex-col justify-between">
-        <div>
-          {isAdmin && (
-            <>
-              <a className="mx-8 mt-8 mb-4 inline-block text-xl font-semibold text-white dark:text-white sm:text-2xl lg:text-xl xl:text-2xl">
-                Admin
-              </a>
-              <Link
-                href={route('cms.countries')}
-                className="mx-8 flex py-2 text-base font-medium text-white hover:text-primary"
-              >
-                Content Management
-              </Link>
-            </>
-          )}
-          <h1 className="mx-8 mt-8 mb-4 inline-block text-xl font-semibold text-white dark:text-white sm:text-2xl lg:text-xl xl:text-2xl">
-            Region
-          </h1>
-          <a
-            href="#"
-            className="mx-8 flex py-2 text-base font-medium text-white hover:text-primary"
-          >
-            Jepang
-          </a>
-          <a
-            href="#"
-            className="mx-8 flex py-2 text-base font-medium text-white hover:text-primary"
-          >
-            Cina
-          </a>
-          <a
-            href="#"
-            className="mx-8 flex py-2 text-base font-medium text-white hover:text-primary"
-          >
-            Korea
-          </a>
-          <button
-            onClick={() => setShowLogoutConfirm(true)}
-            className="mx-8 mt-12 flex py-2 text-base font-medium text-white hover:text-red-500"
-          >
-            Logout
-          </button>
-        </div>
+      <div className="hideOnMobile w-1/6 bg-dark hide">
+        <a className="mx-8 mt-8 mb-4 inline-block text-xl font-semibold text-white dark:text-white sm:text-2xl lg:text-xl xl:text-2xl">
+          Admin
+        </a>
+        <Link
+          href={route('cms.countries')}
+          className="mx-8 flex py-2 text-base font-medium text-white hover:text-primary"
+        >
+          Content Management
+        </Link>
+        <h1 className="mx-8 mt-8 mb-4 inline-block text-xl font-semibold text-white dark:text-white sm:text-2xl lg:text-xl xl:text-2xl">
+          Region
+        </h1>
+        <a
+          href="#"
+          className="mx-8 flex py-2 text-base font-medium text-white hover:text-primary"
+        >
+          Jepang
+        </a>
+        <a
+          href="#"
+          className="mx-8 flex py-2 text-base font-medium text-white hover:text-primary"
+        >
+          Cina
+        </a>
+        <a
+          href="#"
+          className="mx-8 flex py-2 text-base font-medium text-white hover:text-primary"
+        >
+          Korea
+        </a>
       </div>
 
       {/* MOBILE SIDEBAR */}

@@ -1,123 +1,106 @@
 import { usePage } from '@inertiajs/react';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from "@/Components/Navbar";
 import Footer from "@/Components/Footer";
 import MovieCard from "../Components/Home/MovieCard";
 import Sidebar from '../Components/Home/Sidebar';
 import Filter from "../Components/Home/Filter";
-import Pagination from'../Components/Home/Pagination';
-
-function showFilter () {
-    const filterMobile = document.querySelector('.filterMobile');
-    const filterButton = document.querySelector('.filterButton');
-    const hideFilterButton = document.querySelector('.hideFilterButton');
-  
-    console.log(filterMobile, filterButton, hideFilterButton);
-  
-    if (filterMobile && filterButton && hideFilterButton) {
-      filterMobile.style.display = 'flex';
-      filterButton.style.display = 'none';
-      hideFilterButton.style.display = 'flex';
-    } else {
-      console.error('Elemen tidak ditemukan');
-    }
-  }
-  
-  function hideFilter (){
-    const filterMobile = document.querySelector('.filterMobile')
-    const filterButton = document.querySelector('.filterButton')
-    const hideFilterButton = document.querySelector('.hideFilterButton')
-    
-    filterMobile.style.display = 'none'
-    filterButton.style.display = 'flex'
-    hideFilterButton.style.display = 'none'
-  }
-  
-  function showSort (){
-    const sortMobile = document.querySelector('.sortMobile')
-    const sortButton = document.querySelector('.sortButton')
-    const hideSortButton = document.querySelector('.hideSortButton')
-    
-    sortMobile.style.display = 'flex'
-    sortButton.style.display = 'none'
-    hideSortButton.style.display = 'flex'
-    
-  }
-  
-  function hideSort (){
-      const sortMobile = document.querySelector('.sortMobile')
-      const sortButton = document.querySelector('.sortButton')
-      const hideSortButton = document.querySelector('.hideSortButton')
-      
-      sortMobile.style.display = 'none'
-      sortButton.style.display = 'flex'
-      hideSortButton.style.display = 'none'
-    } 
+import Pagination from '../Components/Home/Pagination';
 
 
-    
 export default function Home() {
-
   const { movies } = usePage().props;
-  const { filter } = usePage().props;
-  console.log("movie", movies);
 
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filteredMovies, setFilteredMovies] = useState(movies);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [selectedFilter, setSelectedFilter] = useState({
+    year: '',
+    genre: '',
+    availability: '',
+    award: ''
+  });
+  const itemsPerPage = 5;
 
-    // Pagination logic
-    const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 15; // Menampilkan satu item per halaman
-  
-    // Menghitung total pages
-    const totalPages = Math.ceil(movies.length / itemsPerPage);
-  
-    // Mendapatkan index film yang ditampilkan pada halaman saat ini
-    const indexOfLastMovie = currentPage * itemsPerPage;
-    const indexOfFirstMovie = indexOfLastMovie - itemsPerPage;
-    const currentMovies = movies.slice(indexOfFirstMovie, indexOfLastMovie);
-  
-    const handlePageChange = (page) => {
-      if (page < 1 || page > totalPages) return;
-      setCurrentPage(page);
-    };
+  const totalPages = Math.ceil(filteredMovies.length / itemsPerPage);
+  const indexOfLastMovie = currentPage * itemsPerPage;
+  const indexOfFirstMovie = indexOfLastMovie - itemsPerPage;
+  const currentMovies = filteredMovies.slice(indexOfFirstMovie, indexOfLastMovie);
 
-    return (
+  const handlePageChange = (page) => {
+    if (page < 1 || page > totalPages) return;
+    setCurrentPage(page);
+  };
+
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const handleFilterSubmit = (filter) => {
+    setSelectedFilter(filter);
+    setCurrentPage(1);
+  };
+
+  useEffect(() => {
+    if (!movies || movies.length === 0) return;
+
+    const filtered = movies.filter((movie) => {
+      const matchesSearch =
+        movie.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        movie.actors.some((actor) =>
+          actor.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+
+      const matchesFilter =
+        (!selectedFilter.year || movie.year === parseInt(selectedFilter.year)) &&
+        (!selectedFilter.genre || movie.genres.includes(selectedFilter.genre)) &&
+        (!selectedFilter.availability || movie.availability.includes(selectedFilter.availability)) &&
+        (!selectedFilter.award ||
+          (selectedFilter.award === 'Yes' && movie.awards.length > 0) || 
+          (selectedFilter.award === 'No' && movie.awards.length === 0));
+
+      return matchesSearch && matchesFilter;
+    });
+
+    setFilteredMovies(filtered);
+  }, [searchQuery, selectedFilter, movies]);
+
+  console.log("Movies:", movies);
+
+  return (
     <>
-      <Navbar />
+      <Navbar searchQuery={searchQuery} handleSearchChange={handleSearchChange} />
       <div className="flex mt-16 justify-center">
-      <Sidebar />
-      {/* konten */}
-      <div className="w-10/12 pb-10 lg:pb-20 lg:pt-[]">
-        <div className="container mx-auto">
-          <Filter
-          showFilter={showFilter}
-          hideFilter={hideFilter}
-          showSort={showSort}
-          hideSort={hideSort} />
-          {/* FILM */}
-          <div className="-mx-4 flex flex-wrap mt-14">
-            {currentMovies.map((movie) => (
-                        <MovieCard
-                            key={movie.id}
-                            id={movie.id}
-                            title={movie.title}
-                            year={movie.year}
-                            genres={movie.genres}
-                            poster={movie.photo_url}
-                            rating={movie.rating}
-                        />
-                    ))}
+        <Sidebar />
+        <div className="w-11/12 pb-10 lg:pb-20">
+          <div className="container mx-auto">
+            <Filter onFilterSubmit={handleFilterSubmit} />
+            <div className="-mx-4 flex flex-wrap mt-14">
+              {currentMovies.length > 0 ? (
+                currentMovies.map((movie) => (
+                  <MovieCard
+                    key={movie.id}
+                    id={movie.id}
+                    title={movie.title}
+                    year={movie.year}
+                    genres={movie.genres}
+                    poster={movie.photo_url}
+                    rating={movie.rating}
+                  />
+                ))
+              ) : (
+                <p className="text-center text-white">No movies found.</p>
+              )}
+            </div>
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
           </div>
         </div>
-        {/* Pagination */}
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={handlePageChange}
-        />
       </div>
-        </div>
-        < Footer />
+      <Footer />
     </>
-    
-      );
+  );
 }

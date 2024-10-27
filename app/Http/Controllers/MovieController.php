@@ -7,6 +7,7 @@ use App\Models\Movie;
 use App\Models\Genre;
 use App\Models\Platform;
 use Inertia\Inertia;
+use Illuminate\Http\Request;
 
 class MovieController extends Controller
 {
@@ -25,11 +26,12 @@ class MovieController extends Controller
         ]);
     }
 
-    public function index()
+public function index()
     {
-        $movies = Movie::with(['genres', 'country', 'reviews'])->get();
-
+        $movies = Movie::with(['genres', 'country', 'reviews', 'actors', 'platforms', 'awards'])->get();
+        
         $movies = $movies->map(function ($movie) {
+            
             return [
                 'id' => $movie->id,
                 'title' => $movie->title,
@@ -39,13 +41,18 @@ class MovieController extends Controller
                 'photo_url' => $movie->photo_url,
                 'genres' => $movie->genres->pluck('name'),
                 'country' => $movie->country->name,
+                'actors' => $movie->actors->pluck('name'),
+                'availability' => $movie->platforms->pluck('name'),
+                'awards' => $movie->awards->pluck('name')
             ];
         });
 
         return Inertia::render('Home', [
             'movies' => $movies      
         ]);
+
     }
+
 
     public function show($id)
     {

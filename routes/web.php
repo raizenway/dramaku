@@ -13,13 +13,14 @@ use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::get('/', function () {
-    $user = auth()->user();
-    if ($user && $user->role === 'admin') {
-        return redirect()->route('cms.shows');
-    }
-    return app(MovieController::class)->index();
-})->name('home');
+
+Route::get('/', [MovieController::class, 'index'])->name('home');
+
+Route::get('/movies', [MovieController::class, 'index']);
+
+Route::get('/detail', function () {
+    return Inertia::render('DetailPage');
+})->name('detail');
 
 Route::get('/api/filters', [MovieController::class, 'getFilters']);
 Route::get('/filters', [MovieController::class, 'getFilters']);
