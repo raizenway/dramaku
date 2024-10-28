@@ -3,44 +3,44 @@ import React, { useState } from "react";
 import Search from "./Search";
 import AutenthicationButton from "./AutenthicationButton";
 
-function showSearch(){
-  const searchForm = document.querySelector('.searchForm')
-  const searchButton = document.querySelector('.searchButton')
-  const cancelButton = document.querySelector('.cancelButton')
-  
-  searchForm.style.display = "flex"
-  searchButton.style.display = "none"
-  cancelButton.style.display = "flex"
+function showSearch() {
+  const searchForm = document.querySelector('.searchForm');
+  const searchButton = document.querySelector('.searchButton');
+  const cancelButton = document.querySelector('.cancelButton');
+
+  searchForm.style.display = "flex";
+  searchButton.style.display = "none";
+  cancelButton.style.display = "flex";
 }
 
-function hideSearchForm(){
-const searchForm = document.querySelector('.searchForm')
-const searchButton = document.querySelector('.searchButton')
-const cancelButton = document.querySelector('.cancelButton')
+function hideSearchForm() {
+  const searchForm = document.querySelector('.searchForm');
+  const searchButton = document.querySelector('.searchButton');
+  const cancelButton = document.querySelector('.cancelButton');
 
-searchForm.style.display = 'none'
-cancelButton.style.display = 'none'
-searchButton.style.display = 'flex'
+  searchForm.style.display = 'none';
+  cancelButton.style.display = 'none';
+  searchButton.style.display = 'flex';
 }
 
-function showSidebar(){
-const sidebarButton = document.querySelector('.sidebarButton')
-const sidebar = document.querySelector('.sidebar')
-const closeButton = document.querySelector('.closeButton')
+function showSidebar() {
+  const sidebarButton = document.querySelector('.sidebarButton');
+  const sidebar = document.querySelector('.sidebar');
+  const closeButton = document.querySelector('.closeButton');
 
-sidebar.style.display = 'flex'
-sidebarButton.style.display = 'none'
-closeButton.style.display = 'flex'
+  sidebar.style.display = 'flex';
+  sidebarButton.style.display = 'none';
+  closeButton.style.display = 'flex';
 }
 
-function hideSidebar(){
-const sidebarButton = document.querySelector('.sidebarButton')
-const sidebar = document.querySelector('.sidebar')
-const closeButton = document.querySelector('.closeButton')
+function hideSidebar() {
+  const sidebarButton = document.querySelector('.sidebarButton');
+  const sidebar = document.querySelector('.sidebar');
+  const closeButton = document.querySelector('.closeButton');
 
-sidebar.style.display = 'none'
-sidebarButton.style.display = 'flex'
-closeButton.style.display = 'none'
+  sidebar.style.display = 'none';
+  sidebarButton.style.display = 'flex';
+  closeButton.style.display = 'none';
 }
 
 
@@ -156,29 +156,5 @@ export default function Navbar({searchQuery, handleSearchChange}) {
         </div>
       </div>
     </div>
-  </div>
-  {/* FORM */}
-  <div className="searchForm">
-    <form className="flex items-center gap-1 mx-2 my-2">
-      <div className="hideOnDesktop">
-        <input
-          type="text"
-          placeholder="Masukkan judul"
-          className="w-full px-10 py-3 text-base transition bg-transparent border rounded-md outline-none border-stroke dark:border-dark-3 text-white placeholder:text-dark-6 focus:border-primary dark:focus:border-primary focus-visible:shadow-none"
-        />
-      </div>
-      <div className="hideOnDesktop">
-        <a
-        // search result
-          href="/" 
-          className="px-5 py-3 mx-2 text-base text-white transition duration-300 ease-in-out border rounded-md cursor-pointer border-white bg-dark hover:bg-white hover:text-dark"
-        >
-          Telusuri
-        </a>
-      </div>
-    </form>
-  </div>
-</div>
-
   );
 }

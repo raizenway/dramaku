@@ -33,7 +33,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        return redirect('/');
     }
 
     /**
@@ -41,12 +41,16 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
+        $user = Auth::user();
         Auth::guard('web')->logout();
-
+    
         $request->session()->invalidate();
-
         $request->session()->regenerateToken();
-
+    
+        if ($user && $user->role === 'admin') {
+            return redirect('/cms-countries');
+        }
+    
         return redirect('/');
     }
 }
