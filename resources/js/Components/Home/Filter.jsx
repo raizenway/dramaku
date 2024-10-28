@@ -77,7 +77,7 @@ const filterOptions = {
                 </select>
               ))}
             </div>
-            <button type="submit" className="w-64 mt-3 px-5 p-3 text-white bg-dark">
+            <button type="submit" className="w-64 mt-3 px-5 p-3 text-white bg-dark hover:bg-dark-3 rounded-md">
               Submit
             </button>
           </form>
