@@ -12,15 +12,12 @@ import ReviewSection from "@/Components/Details/ReviewSection";
 import AwardSection from "@/Components/Details/AwardSection";
 
 export default function DetailPage() {
-    const { movie, auth } = usePage().props;
-    const user = auth.user;
+    const { movie, userReview, user } = usePage().props;
     const [reviews, setReviews] = useState(movie.reviews || []);
 
     const handleReviewSubmitted = (newReview) => {
         setReviews([newReview, ...reviews]);
     };
-
-    const userHasReviewed = reviews.some(review => review.email === user.email);
 
     return (
         <>
@@ -40,13 +37,15 @@ export default function DetailPage() {
                     <CastSection casts={movie.casts} />
                     <AwardSection awards={movie.awards} />
                     <ReviewSection reviews={reviews} />
-                    {!userHasReviewed && (
+                    {user ? (
                         <ReviewForm
-                            movieId={movie.id}
                             onReviewSubmitted={handleReviewSubmitted}
                             user={user}
                             movie={movie}
+                            userReview={userReview}
                         />
+                    ) : (
+                        <p className="text-base">You need to log in to submit your review.</p>
                     )}
                 </div>
             </section>

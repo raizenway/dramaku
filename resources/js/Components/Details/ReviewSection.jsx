@@ -43,24 +43,15 @@ const ReviewSection = ({ reviews = [] }) => {
 
             <div className={`overflow-auto p-4 mb-10 ${filteredReviews.length > 0 ? 'max-h-80' : ''}`} style={{ maxHeight: filteredReviews.length > 0 ? 'h-80' : 'auto' }}>
                 {filteredReviews.length > 0 ? (
-                    filteredReviews.map((review, index) => {
-                        // Check if review is valid and has the necessary properties
-                        if (review && review.author !== undefined) {
-                            return (
-                                <ReviewCard
-                                    key={index}
-                                    author={review.author}
-                                    email={review.email}
-                                    content={review.content}
-                                    rating={review.rating}
-                                />
-                            );
-                        } else {
-                            // Optionally log or handle invalid review data
-                            console.error('Invalid review data:', review);
-                            return null; // Skip this review
-                        }
-                    })
+                    filteredReviews.map((review, index) => (
+                        <ReviewCard
+                            key={index}
+                            author={review.author}
+                            email={review.email}
+                            content={review.content}
+                            rating={review.rating}
+                        />
+                    ))
                 ) : (
                     <p className="text-gray-500">No reviews available.</p>
                 )}

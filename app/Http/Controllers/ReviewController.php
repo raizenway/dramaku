@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Movie;
+use App\Http\Controllers\Controller;
 use App\Models\Review;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class ReviewController extends Controller
 {
@@ -12,29 +13,33 @@ class ReviewController extends Controller
     {
         $reviews = Review::with('user', 'movie')->get();
 
-        return inertia('CMS/CMSReviews', [
-            'reviews' => $reviews,
+        return Inertia::render('CMS/CMSReviews', [
+            'reviews' => $reviews
         ]);
     }
 
     public function store(Request $request)
     {
-        $request->validate([
-            'rate' => 'required|integer|min:1|max:5',
+        $validated = $request->validate([
+            'rate' => 'required|integer|between:1,5',
             'comment' => 'required|string|max:1000',
             'user_id' => 'required|exists:users,id',
             'movie_id' => 'required|exists:movies,id',
         ]);
-
-        $review = new Review([
-            'rate' => $request->input('rate'),
-            'comment' => $request->input('comment'),
-            'user_id' => $request->input('user_id'),
-            'movie_id' => $request->input('movie_id'),
+    
+        $review = Review::create($validated);
+    }
+    
+    public function updateStatus(Request $request, $id)
+    {
+        $request->validate([
+            'status' => 'required|string|in:pending,approved,rejected',
         ]);
 
+        $review = Review::findOrFail($id);
+        $review->status = $request->input('status');
         $review->save();
 
-        return redirect()->back()->with('success', 'Review submitted successfully.');
+        return redirect()->back()->with('success', 'Review status updated successfully.');
     }
 }

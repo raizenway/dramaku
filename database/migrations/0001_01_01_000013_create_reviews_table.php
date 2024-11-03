@@ -14,6 +14,7 @@ return new class extends Migration
             $table->foreignId('movie_id')->constrained('movies');
             $table->integer('rate');
             $table->text('comment');
+            $table->string('status')->default('pending');
             $table->timestamps();
         });
     }
