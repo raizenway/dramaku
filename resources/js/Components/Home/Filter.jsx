@@ -25,8 +25,6 @@ const filterOptions = {
 };
 
 
-
-  // Ambil data filter dari backend
   useEffect(() => {
     axios.get('/api/filters')
       .then((response) => {

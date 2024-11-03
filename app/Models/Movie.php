@@ -8,6 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 class Movie extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'title',
+        'alternative_title',
+        'photo_url',
+        'year',
+        'country_id',
+        'synopsis',
+        'link_trailer'
+    ];
+
     public function genres()
     {
         return $this->belongsToMany(Genre::class, 'movie_genres');
@@ -35,6 +46,6 @@ class Movie extends Model
 
     public function awards()
     {
-        return $this->hasMany(Award::class, 'movie_id');
+        return $this->hasMany(Award::class);
     }
 }

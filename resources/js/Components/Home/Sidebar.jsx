@@ -1,7 +1,9 @@
 import { Link, useForm } from '@inertiajs/react';
 import { useState } from 'react';
+import { usePage} from '@inertiajs/react';
 
-export default function Sidebar({ user }) {
+export default function Sidebar({ user, countries }) {
+  console.log("countries: ", countries);
   const isAdmin = user && user.role === 'admin';
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const { post } = useForm();
@@ -27,24 +29,15 @@ export default function Sidebar({ user }) {
         <h1 className="mx-8 mt-8 mb-4 inline-block text-xl font-semibold text-white dark:text-white sm:text-2xl lg:text-xl xl:text-2xl">
           Region
         </h1>
-        <a
-          href="#"
-          className="mx-8 flex py-2 text-base font-medium text-white hover:text-primary"
-        >
-          Jepang
-        </a>
-        <a
-          href="#"
-          className="mx-8 flex py-2 text-base font-medium text-white hover:text-primary"
-        >
-          Cina
-        </a>
-        <a
-          href="#"
-          className="mx-8 flex py-2 text-base font-medium text-white hover:text-primary"
-        >
-          Korea
-        </a>
+        {countries && countries.map((country, index) => (
+          <a
+            key={index}
+            href="#"
+            className="mx-8 flex py-2 text-base font-medium text-white hover:text-primary"
+          >
+            {country}
+          </a>
+        ))}
       </div>
 
       {/* MOBILE SIDEBAR */}

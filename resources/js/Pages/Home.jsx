@@ -10,6 +10,9 @@ import Pagination from '../Components/Home/Pagination';
 
 export default function Home() {
   const { movies } = usePage().props;
+  const { countries } = usePage().props;
+  console.log("movies: ", movies);
+
 
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredMovies, setFilteredMovies] = useState(movies);
@@ -65,13 +68,13 @@ export default function Home() {
     setFilteredMovies(filtered);
   }, [searchQuery, selectedFilter, movies]);
 
-  console.log("Movies:", movies);
+  
 
   return (
     <>
       <Navbar searchQuery={searchQuery} handleSearchChange={handleSearchChange} />
       <div className="flex mt-16 justify-center">
-        <Sidebar />
+        <Sidebar countries={countries}/>
         <div className="w-11/12 pb-10 lg:pb-20">
           <div className="container mx-auto">
             <Filter onFilterSubmit={handleFilterSubmit} />

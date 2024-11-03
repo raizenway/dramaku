@@ -156,5 +156,7 @@ export default function Navbar({searchQuery, handleSearchChange}) {
         </div>
       </div>
     </div>
+  </div>
+  </div>
   );
 }

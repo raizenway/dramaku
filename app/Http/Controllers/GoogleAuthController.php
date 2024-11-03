@@ -39,6 +39,10 @@ class GoogleAuthController extends Controller
                         'email' => $google_user->getEmail(),
                         'googleAuth' => $google_user->getId(),
                         'password' => Hash::make(uniqid()),
+<<<<<<< HEAD
+=======
+                        'role' => 'user',
+>>>>>>> main
                     ]);
                 }
             }
