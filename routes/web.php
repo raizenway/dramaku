@@ -67,6 +67,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/cms-reviews', [ReviewController::class, 'index'])->name('cms.reviews');
 
     Route::get('/cms-users', [UserController::class, 'index'])->name('cms.users');
+    Route::put('/cms-users/{user}/suspend', [UserController::class, 'suspend'])->name('cms.users.suspend');
 
 });
 
@@ -79,5 +80,11 @@ Route::middleware('auth')->group(function () {
 
 Route::get('auth/google', [GoogleAuthController::class, 'redirect'])->name('google.auth');
 Route::get('auth/google/callback', [GoogleAuthController::class, 'callback']);
+
+Route::get('/login', function () {
+    return Inertia::render('Auth/Login', [
+        'error' => session('error'),
+    ]);
+})->name('login');
 
 require __DIR__.'/auth.php';

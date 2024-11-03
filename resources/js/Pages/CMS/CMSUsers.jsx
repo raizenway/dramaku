@@ -1,97 +1,21 @@
 import React, { useState } from 'react';
 import { usePage, router as Inertia } from '@inertiajs/react';
 import CMSLayout from "@/Components/CMS/CMSLayout";
-import CMSForm from "@/Components/CMS/CMSForm";
-import CMSTable from "@/Components/CMS/CMSTable";
 import Pagination from '@/Components/Home/Pagination';
 
 const CMSUsers = () => {
   const { users } = usePage().props;
   const [userList, setUserList] = useState(users);
-
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
   const totalPages = Math.ceil(userList.length / itemsPerPage);
+  const currentUsers = userList.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
-  const indexOfLastUser = currentPage * itemsPerPage;
-  const indexOfFirstUser = indexOfLastUser - itemsPerPage;
-  const currentUsers = userList.slice(indexOfFirstUser, indexOfLastUser);
-
-  const formFields = [
-    { id: 'username', placeholder: 'Username' },
-    { id: 'email', placeholder: 'Email' }
-  ];
-
-  const columns = [
-    { id: 'username', title: 'Username' },
-    { id: 'email', title: 'Email' },
-  ];
-
-  const actions = [
-    {
-      label: "Send First Email",
-      className: "text-primary hover:underline px-1",
-      onClick: (item) => console.log("Send First Email clicked for", item),
-    },
-    {
-      label: "Rename",
-      className: "text-primary hover:underline px-1",
-      onClick: (item) => console.log("Rename clicked for", item),
-    },
-    {
-      label: "Delete",
-      className: "text-red-500 hover:underline px-1",
-      onClick: (item) => console.log("Delete clicked for", item),
-    },
-  ];
-
-  const handleUserSubmit = (formData) => {
-    Inertia.post('/cms-users', formData, {
-      onSuccess: (response) => {
-        const newUser = response.props.users.find(u => u.username === formData.username);
-        if (newUser) {
-          setUserList([...userList, newUser]);
-        }
-        alert('User created successfully!');
-      },
-      onError: (errors) => {
-        alert('Failed to create user: ' + errors.username);
-      }
-    });
-  };
-
-  const handleEdit = (item) => {
-    const newUsername = prompt("Enter new username", item.username);
-    if (newUsername) {
-      Inertia.put(`/cms-users/${item.id}`, { username: newUsername }, {
-        onSuccess: () => {
-          setUserList(userList.map(user =>
-            user.id === item.id ? { ...user, username: newUsername } : user
-          ));
-          alert('User updated successfully!');
-        },
-        onError: (errors) => {
-          alert('Failed to update user: ' + errors.username);
-        }
-      });
-    }
+  const handleSuspendToggle = (user) => {
+    Inertia.put(`/cms-users/${user.id}/suspend`);
   };
   
-  const handleDelete = (item) => {
-    if (confirm("Are you sure you want to delete this user?")) {
-      Inertia.delete(`/cms-users/${item.id}`, {
-        onSuccess: () => {
-          setUserList(userList.filter(user => user.id !== item.id));
-          alert('User deleted successfully!');
-        },
-        onError: () => {
-          alert('Failed to delete user.');
-        }
-      });
-    }
-  };
-
   const handlePageChange = (page) => {
     if (page < 1 || page > totalPages) return;
     setCurrentPage(page);
@@ -99,16 +23,50 @@ const CMSUsers = () => {
   
   return (
     <CMSLayout title="Users">
-      <CMSForm fields={formFields} onSubmit={handleUserSubmit} />
-      
-      <CMSTable 
-        columns={columns} 
-        data={currentUsers} 
-        actions={actions}
-        currentPage={currentPage}
-        itemsPerPage={itemsPerPage}
-      />
-      
+      <div className="relative overflow-x-auto shadow-md rounded-lg my-10">
+        <table className="w-full">
+          <thead className="text-white bg-dark-2 text-left">
+            <tr>
+              <th className="p-4 w-1/12 text-center">No.</th>
+              <th className="p-4 w-5/12">Username</th>
+              <th className="p-4 w-3/12">Email</th>
+              <th className="p-4 w-2/12">Role</th>
+              <th className="p-4 w-1/12 text-center">Actions</th>
+            </tr>
+          </thead>
+          <tbody className="text-base text-body-color dark:text-dark-6">
+            {currentUsers.length === 0 ? (
+              <tr>
+                <td colSpan="5" className="text-center py-4">No users available</td>
+              </tr>
+            ) : (
+              currentUsers.map((user, index) => (
+                <tr key={user.id} className="border-b hover:bg-gray-100">
+                  <td className="px-2 py-4 text-center">
+                    {(currentPage - 1) * itemsPerPage + index + 1}
+                  </td>
+                  <td className="px-2 py-4">{user.username}</td>
+                  <td className="px-2 py-4">{user.email}</td>
+                  <td className="px-2 py-4 capitalize">{user.role}</td>
+                  <td className="px-2 py-4 text-center">
+                    {user.role === 'admin' ? (
+                      ''
+                    ) : (
+                      <button
+                        onClick={() => handleSuspendToggle(user)}
+                        className="text-primary hover:underline px-1"
+                      >
+                        {user.role === 'suspended' ? 'Unsuspend' : 'Suspend'}
+                      </button>
+                    )}
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
+
       <Pagination
         currentPage={currentPage}
         totalPages={totalPages}

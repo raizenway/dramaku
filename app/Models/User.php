@@ -44,4 +44,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    
+    public function isSuspended(): bool
+    {
+        return $this->role === 'suspended';
+    }
 }
