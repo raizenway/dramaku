@@ -67,6 +67,7 @@ class MovieController extends Controller
     
         $approvedReviews = $movie->reviews()
             ->where('status', 'approved')
+            ->orderBy('created_at', 'asc')
             ->get()
             ->map(function ($review) {
                 return [
@@ -106,5 +107,5 @@ class MovieController extends Controller
             ] : null,
             'user' => auth()->user(),
         ]);
-    }    
+    }
 }
