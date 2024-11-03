@@ -23,6 +23,12 @@ class Movie extends Model
         return $this->hasMany(Review::class);
     }
 
+    public function awards()
+    {
+        return $this->hasMany(Award::class);
+    }
+
+
     public function platforms()
     {
         return $this->belongsToMany(Platform::class, 'movie_platforms');

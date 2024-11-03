@@ -17,20 +17,24 @@ class ReviewController extends Controller
         ]);
     }
 
-    public function store(Request $request, Movie $movie)
+    public function store(Request $request)
     {
-        $validated = $request->validate([
-            'rate' => 'required|integer|min:1|max:10',
-            'comment' => 'required|string|min:5',
+        $request->validate([
+            'rate' => 'required|integer|min:1|max:5',
+            'comment' => 'required|string|max:1000',
+            'user_id' => 'required|exists:users,id',
+            'movie_id' => 'required|exists:movies,id',
         ]);
 
-        $review = new Review();
-        $review->user_id = auth()->id();
-        $review->movie_id = $movie->id;
-        $review->rate = $validated['rate'];
-        $review->comment = $validated['comment'];
+        $review = new Review([
+            'rate' => $request->input('rate'),
+            'comment' => $request->input('comment'),
+            'user_id' => $request->input('user_id'),
+            'movie_id' => $request->input('movie_id'),
+        ]);
+
         $review->save();
 
-        return redirect()->back()->with('success', 'Review submitted successfully!');
+        return redirect()->back()->with('success', 'Review submitted successfully.');
     }
 }

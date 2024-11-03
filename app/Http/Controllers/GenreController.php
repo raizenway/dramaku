@@ -10,7 +10,7 @@ class GenreController extends Controller
 {
     public function index()
     {
-        $genres = Genre::all();
+        $genres = Genre::orderBy('created_at', 'desc')->get();
         return Inertia::render('CMS/CMSGenres', [
             'genres' => $genres,
         ]);

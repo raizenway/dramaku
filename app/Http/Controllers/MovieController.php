@@ -49,9 +49,18 @@ class MovieController extends Controller
 
     public function show($id)
     {
-        $movie = Movie::with(['country', 'genres', 'actors', 'reviews.user', 'platforms'])
-            ->findOrFail($id);
-    
+        $movie = Movie::with([
+            'country', 
+            'genres', 
+            'actors', 
+            'reviews' => function ($query) {
+                $query->orderBy('created_at', 'asc');
+            }, 
+            'reviews.user', 
+            'platforms', 
+            'awards'
+        ])->findOrFail($id);
+        
         return Inertia::render('DetailPage', [
             'movie' => [
                 'id' => $movie->id,
@@ -78,8 +87,8 @@ class MovieController extends Controller
                         'rating' => $review->rate,
                     ];
                 }),
+                'awards' => $movie->awards->pluck('name'),
             ]
         ]);
     }
-    
 }

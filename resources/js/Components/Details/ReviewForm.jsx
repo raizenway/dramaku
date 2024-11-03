@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { usePage, router as Inertia } from '@inertiajs/react';
 
-const ReviewForm = ({ movieId, onReviewSubmitted }) => {
+const ReviewForm = ({ onReviewSubmitted, user, movie }) => {
     const [data, setData] = useState({
         rate: 0,
         comment: '',
+        user_id: user.id,
+        movie_id: movie.id,
     });
     const [errors, setErrors] = useState({});
 
@@ -12,29 +14,39 @@ const ReviewForm = ({ movieId, onReviewSubmitted }) => {
         setData({ ...data, rate: index + 1 });
     };
 
+    const validateForm = (formData) => {
+        const errors = {};
+        if (formData.rate === 0) {
+            errors.rate = 'Rating is required';
+        }
+        if (!formData.comment) {
+            errors.comment = 'Comment is required';
+        }
+        return errors;
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        Inertia.post(`/movies/${movieId}/reviews`, data, {
-            onSuccess: (response) => {
-                const newReview = response.props.review;
-                if (newReview) {
-                    onReviewSubmitted(newReview);
-                    setData({ rate: 0, comment: '' });
-                    setErrors({});
-                }
+        const validationErrors = validateForm(data);
+        if (Object.keys(validationErrors).length > 0) {
+            setErrors(validationErrors);
+            return;
+        }
+        Inertia.post('/review', data, {
+            onSuccess: ({ props }) => {
+                onReviewSubmitted(props.review);
+                setErrors({});
             },
-            onError: (error) => {
-                if (error.response && error.response.data.errors) {
-                    setErrors(error.response.data.errors);
-                }
-            }
-        });
+            onError: (errors) => {
+                setErrors(errors);
+                alert('Failed to submit review: ' + (errors.comment || "Unknown error"));
+            },
+        });        
     };
 
     return (
         <form className="mb-10 bg-gray-100 p-4 rounded-lg" onSubmit={handleSubmit}>
-            <h2 className="text-2xl font-bold mb-4">Add yours!</h2>
-            
+            <h2 className="text-2xl font-bold mb-4">Add Yours {user.name}!</h2>
             <div className="mb-4 lg:w-1/2">
                 <label htmlFor="rate">Rate</label>
                 <div className="flex space-x-1">
@@ -52,7 +64,7 @@ const ReviewForm = ({ movieId, onReviewSubmitted }) => {
             </div>
 
             <div className="mb-4">
-                <label htmlFor="comment">Your thoughts</label>
+                <label htmlFor="comment">Your thoughts on {movie.title}</label>
                 <textarea
                     id="comment"
                     name="comment"

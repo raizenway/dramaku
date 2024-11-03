@@ -7,7 +7,7 @@
   const CMSReviews = () => {
     const { reviews } = usePage().props;
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 5;
+    const itemsPerPage = 10;
 
     const totalPages = Math.ceil((reviews?.length || 0) / itemsPerPage);
 

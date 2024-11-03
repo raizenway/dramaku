@@ -9,11 +9,11 @@ return new class extends Migration
     public function up()
     {
         Schema::create('awards', function (Blueprint $table) {
-            $table->id();
+            $table->id()->primary();
             $table->string('name', 255);
-            $table->foreignId('country_id')->constrained('countries')->onDelete('cascade');
+            $table->foreignId('country_id')->nullable()->constrained('countries')->onDelete('set null');
             $table->year('year');
-            $table->foreignId('movie_id')->nullable()->constrained('movies')->onDelete('cascade');
+            $table->foreignId('movie_id')->nullable()->constrained('movies')->onDelete('set null');
             $table->timestamps();
         });
     }

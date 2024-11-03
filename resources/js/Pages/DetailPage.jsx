@@ -9,22 +9,24 @@ import Navbar from "@/Components/Navbar";
 import Footer from "@/Components/Footer";
 import { Head, usePage } from '@inertiajs/react';
 import ReviewSection from "@/Components/Details/ReviewSection";
+import AwardSection from "@/Components/Details/AwardSection";
 
 export default function DetailPage() {
     const { movie, auth } = usePage().props;
-    const [reviews, setReviews] = useState(movie.reviews || []);
-
     const user = auth.user;
+    const [reviews, setReviews] = useState(movie.reviews || []);
 
     const handleReviewSubmitted = (newReview) => {
         setReviews([newReview, ...reviews]);
     };
 
+    const userHasReviewed = reviews.some(review => review.email === user.email);
+
     return (
         <>
             <Head title={movie.title || "Detail"} />
             <Navbar />
-            <section className="pt-24 md:pt-28">
+            <section className="pt-24 md:pt-28 pb-20">
                 <div className="container">
                     <MovieHeader
                         title={movie.title || 'Untitled'}
@@ -33,11 +35,19 @@ export default function DetailPage() {
                         rating={movie.rating || 0}
                     />
                     <MediaSection poster={movie.poster} trailerUrl={movie.trailerUrl} />
-                    {movie.genres && <GenreTags genres={movie.genres} />}
-                    {movie.synopsis && <SynopsisSection synopsis={movie.synopsis} platforms={movie.platforms || []} />}
-                    {movie.casts && <CastSection casts={movie.casts} />}
-                    {reviews && <ReviewSection reviews={reviews} />}
-                    {user && <ReviewForm movieId={movie.id} onReviewSubmitted={handleReviewSubmitted} />}
+                    <GenreTags genres={movie.genres} />
+                    <SynopsisSection synopsis={movie.synopsis} platforms={movie.platforms || []} />
+                    <CastSection casts={movie.casts} />
+                    <AwardSection awards={movie.awards} />
+                    <ReviewSection reviews={reviews} />
+                    {!userHasReviewed && (
+                        <ReviewForm
+                            movieId={movie.id}
+                            onReviewSubmitted={handleReviewSubmitted}
+                            user={user}
+                            movie={movie}
+                        />
+                    )}
                 </div>
             </section>
             <Footer />

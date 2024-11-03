@@ -14,18 +14,32 @@ export default function Login({ status, canResetPassword }) {
     });
 
     const [loginError, setLoginError] = useState(false);
+    const [emailError, setEmailError] = useState(false);
 
     const submit = (e) => {
         e.preventDefault();
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        
+        if (!emailPattern.test(data.email)) {
+            setEmailError('Invalid email format');
+            setLoginError(false);
+            return;
+        }
+
+        setEmailError(false);
+        
         post(route('login'), {
             onFinish: () => reset('password'),
-            onError: () => setLoginError(true),  // Set login error to true when login fails
+            onError: () => {
+                setLoginError(true);
+                setEmailError(false);
+            },
         });
     };
 
-    // Function to reset login error when input is focused
     const handleFocus = () => {
-        setLoginError(false);  // Reset login error when the user focuses on the input
+        setLoginError(false);
+        setEmailError(false);
     };
 
     return (
@@ -34,6 +48,7 @@ export default function Login({ status, canResetPassword }) {
 
             {status && <div className="mb-4 font-medium text-sm text-green-600">{status}</div>}
             {loginError && <div className="mb-4 font-medium text-sm text-red-600">Username or password is incorrect</div>}
+            {emailError && <div className="mb-4 font-medium text-sm text-red-600">{emailError}</div>}
 
             <form onSubmit={submit}>
                 <InputField
@@ -41,8 +56,8 @@ export default function Login({ status, canResetPassword }) {
                     placeholder="Email"
                     value={data.email}
                     onChange={(e) => setData('email', e.target.value)}
-                    onFocus={handleFocus}  // Call handleFocus when input is clicked
-                    hasError={loginError}
+                    onFocus={handleFocus}
+                    hasError={emailError || loginError}
                     required
                 />
                 <InputField
@@ -50,7 +65,7 @@ export default function Login({ status, canResetPassword }) {
                     placeholder="Password"
                     value={data.password}
                     onChange={(e) => setData('password', e.target.value)}
-                    onFocus={handleFocus}  // Call handleFocus when input is clicked
+                    onFocus={handleFocus}
                     hasError={loginError}
                     required
                 />
@@ -69,7 +84,11 @@ export default function Login({ status, canResetPassword }) {
                     text="Sign In with Google"
                     icon={google}
                     isPrimary={false}
-                    onClick={() => window.location.href = route('google.auth')}
+                    onClick={(e) => {
+                        e.preventDefault();
+                        window.location.href = route('google.auth');
+                    }}
+                    type="button"
                 />
             </form>
             <p className="text-base text-body-secondary mt-4">

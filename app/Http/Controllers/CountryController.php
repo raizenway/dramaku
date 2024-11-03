@@ -10,7 +10,7 @@ class CountryController extends Controller
 {
     public function index()
     {
-        $countries = Country::all();
+        $countries = Country::orderBy('created_at', 'desc')->get();
         return Inertia::render('CMS/CMSCountries', [
             'countries' => $countries,
         ]);
@@ -32,15 +32,15 @@ class CountryController extends Controller
     public function update(Request $request, Country $country)
     {
         $request->validate([
-            'country' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
         ]);
-
+    
         $country->update([
-            'name' => $request->input('country'),
+            'name' => $request->input('name'),
         ]);
-
+    
         return redirect()->route('cms.countries');
-    }
+    }    
 
     public function destroy(Country $country)
     {

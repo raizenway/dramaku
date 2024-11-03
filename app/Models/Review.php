@@ -2,10 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Review extends Model
 {
+    use HasFactory;
+
+    protected $fillable = ['rate', 'comment', 'user_id', 'movie_id'];
     public function movie()
     {
         return $this->belongsTo(Movie::class);
