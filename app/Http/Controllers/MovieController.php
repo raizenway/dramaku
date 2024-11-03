@@ -27,7 +27,9 @@ class MovieController extends Controller
 
     public function index()
     {
-        $movies = Movie::with(['genres', 'country', 'reviews'])->get();
+        $movies = Movie::with(['genres', 'country', 'reviews' => function ($query) {
+            $query->where('status', 'approved');
+        }])->get();
 
         $movies = $movies->map(function ($movie) {
             return [
@@ -53,14 +55,28 @@ class MovieController extends Controller
             'country', 
             'genres', 
             'actors', 
-            'reviews' => function ($query) {
-                $query->orderBy('created_at', 'asc');
-            }, 
-            'reviews.user', 
             'platforms', 
-            'awards'
+            'awards',
+            'reviews.user'
         ])->findOrFail($id);
-        
+    
+        $userReview = null;
+        if (auth()->check()) {
+            $userReview = $movie->reviews()->where('user_id', auth()->id())->first();
+        }
+    
+        $approvedReviews = $movie->reviews()
+            ->where('status', 'approved')
+            ->get()
+            ->map(function ($review) {
+                return [
+                    'author' => $review->user->name,
+                    'email' => $review->user->email,
+                    'content' => $review->comment,
+                    'rating' => $review->rate,
+                ];
+            });
+    
         return Inertia::render('DetailPage', [
             'movie' => [
                 'id' => $movie->id,
@@ -79,16 +95,16 @@ class MovieController extends Controller
                         'image' => $actor->photo_url,
                     ];
                 }),
-                'reviews' => $movie->reviews->map(function ($review) {
-                    return [
-                        'author' => $review->user->name,
-                        'email' => $review->user->email,
-                        'content' => $review->comment,
-                        'rating' => $review->rate,
-                    ];
-                }),
+                'reviews' => $approvedReviews,
                 'awards' => $movie->awards->pluck('name'),
-            ]
+            ],
+            'userReview' => $userReview ? [
+                'id' => $userReview->id,
+                'status' => $userReview->status,
+                'rate' => $userReview->rate,
+                'comment' => $userReview->comment,
+            ] : null,
+            'user' => auth()->user(),
         ]);
-    }
+    }    
 }

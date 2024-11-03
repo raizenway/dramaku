@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -9,7 +8,8 @@ class Review extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['rate', 'comment', 'user_id', 'movie_id'];
+    protected $fillable = ['rate', 'comment', 'user_id', 'movie_id', 'status'];
+
     public function movie()
     {
         return $this->belongsTo(Movie::class);

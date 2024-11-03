@@ -13,7 +13,15 @@ const CMSUsers = () => {
   const currentUsers = userList.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   const handleSuspendToggle = (user) => {
-    Inertia.put(`/cms-users/${user.id}/suspend`);
+    Inertia.put(`/cms-users/${user.id}/suspend`, {}, {
+      onSuccess: () => {
+        setUserList(prevUserList => 
+          prevUserList.map(u => 
+            u.id === user.id ? { ...u, role: u.role === 'suspended' ? 'user' : 'suspended' } : u
+          )
+        );
+      }
+    });
   };
   
   const handlePageChange = (page) => {
