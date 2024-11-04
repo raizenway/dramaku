@@ -49,9 +49,4 @@ class Movie extends Model
     {
         return $this->belongsTo(Country::class);
     }
-
-    public function awards()
-    {
-        return $this->hasMany(Award::class);
-    }
 }

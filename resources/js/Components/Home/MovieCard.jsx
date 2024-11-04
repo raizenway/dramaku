@@ -1,35 +1,18 @@
-<<<<<<< HEAD
-import { useState } from 'react';
-import { Link } from '@inertiajs/react';
-
-function MovieCard({ id, poster, title, year, genres, rating }) {
-    const [isPosterBroken, setIsPosterBroken] = useState(false);
-    const displayRating = rating === null ? 0 : rating;
-    const handleCardClick = () => {
-      window.location.href = `/movies/${id}`;
-=======
 import { Link } from 'react-router-dom';
 
 function MovieCard({ id, poster, title, year, genres, rating }) {
     const displayRating = rating === null ? 0 : rating;
     const handleCardClick = () => {
       window.location.href = `/movie/${id}`;
->>>>>>> main
     };
  
     return (
     <div className="w-full px-10 md:w-1/2 lg:w-1/5" onClick={handleCardClick}>
       <div className="wow fadeInUp group mb-10" data-wow-delay=".1s">
         <div className="mb-8 overflow-hidden rounded-[5px]">
-<<<<<<< HEAD
-          <Link to={`/movies/${id}`} className="block">
-            <img
-              src={poster}
-=======
           <Link to={`/movie/${id}`} className="block">
             <img
               src={poster.startsWith("http") ? poster : `/${poster}`}
->>>>>>> main
               alt={title}
               className="w-full transition group-hover:rotate-6 group-hover:scale-125"
             />
@@ -63,16 +46,9 @@ function MovieCard({ id, poster, title, year, genres, rating }) {
             Rate {displayRating}/10
           </p>
         </div>
-<<<<<<< HEAD
-    );
-}
-
-export default MovieCard;
-=======
       </div>
     </div>
   );
 }
 
 export default MovieCard;
->>>>>>> main
