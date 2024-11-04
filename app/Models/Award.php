@@ -1,22 +1,30 @@
 <?php
+<<<<<<< HEAD
+=======
+
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+>>>>>>> main
 use Illuminate\Database\Eloquent\Model;
 
 class Award extends Model
 {
-    use HasFactory;
 
-    protected $fillable = ['name', 'country_id', 'year', 'movie_id'];
+<<<<<<< HEAD
+=======
+    protected $fillable = [
+        'name',
+        'movie_id'
+    ];
 
+>>>>>>> main
     public function movie()
     {
         return $this->belongsTo(Movie::class);
     }
+<<<<<<< HEAD
 
-    public function country()
-    {
-        return $this->belongsTo(Country::class);
-    }
 }
+=======
+}
+>>>>>>> main

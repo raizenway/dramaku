@@ -10,16 +10,18 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\CMSShowInputController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::get('/', function () {
-    $user = auth()->user();
-    if ($user && $user->role === 'admin') {
-        return redirect()->route('cms.shows');
-    }
-    return app(MovieController::class)->index();
-})->name('home');
+
+Route::get('/', [MovieController::class, 'index'])->name('home');
+
+Route::get('/movies', [MovieController::class, 'index']);
+
+Route::get('/detail', function () {
+    return Inertia::render('DetailPage');
+})->name('detail');
 
 Route::get('/api/filters', [MovieController::class, 'getFilters']);
 Route::get('/filters', [MovieController::class, 'getFilters']);
@@ -37,9 +39,10 @@ Route::middleware(['auth', 'admin'])->group(function () {
         return Inertia::render('CMS/CMSValidateShows');
     })->name('cms.shows.validate');
 
-    Route::get('/cms-show-input', function () {
-        return Inertia::render('CMS/CMSInputShow');
-    })->name('cms.show.input');
+    Route::get('/cms-show-input', [CMSShowInputController::class, 'index'])->name('cms.show.input');
+
+    //Unggah movie
+    Route::post('/movies/post', [CMSShowInputController::class, 'store'])->name('movies.post.store');
     
     Route::prefix('cms/movies')->group(function () {
         Route::get('/', [MovieController::class, 'index'])->name('cms.movies.index');

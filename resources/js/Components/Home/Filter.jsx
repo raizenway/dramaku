@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-const Filter = ({ showFilter, hideFilter, showSort, hideSort }) => {
+const Filter = ({ onFilterSubmit, showFilter, hideFilter, showSort, hideSort }) => {
   const [filters, setFilters] = useState({
     years: [],
     genres: [],
@@ -9,16 +10,45 @@ const Filter = ({ showFilter, hideFilter, showSort, hideSort }) => {
     awards: []
   });
 
-  // Ambil data filter dari backend
+const [selectedFilter, setSelectedFilter] = useState({
+  year: '',
+  genre: '',
+  availability: '',
+  award: '',
+});
+
+const filterOptions = {
+  year: 'years',
+  genre: 'genres',
+  availability: 'availability',
+  award: 'awards',
+};
+
+
   useEffect(() => {
     axios.get('/api/filters')
       .then((response) => {
+        console.log('Filters data:', response.data); // Debugging log
         setFilters(response.data);
       })
       .catch((error) => {
         console.error('Error fetching filters:', error);
       });
   }, []);
+  
+
+  // Handle perubahan input filter
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    console.log(`Filter Changed: ${name} = ${value}`);
+    setSelectedFilter((prev) => ({ ...prev, [name]: value }));
+  };
+
+  // Handle submit filter
+  const handleSubmit = (e) => {
+    e.preventDefault(); // Mencegah reload form default
+    onFilterSubmit(selectedFilter); // Mengirimkan filter ke parent component
+  };
 
   return (
     <>
@@ -26,19 +56,18 @@ const Filter = ({ showFilter, hideFilter, showSort, hideSort }) => {
       <div className="hideOnMobile">
         <div className="w-full px-4">
           <div className="mb-7 mt-12 text-center">
+          <form onSubmit={handleSubmit}>
             <div className="flex gap-1">
-              {['years', 'genres', 'availability', 'awards'].map((filter) => (
+              {Object.keys(filterOptions).map((filter) => (
                 <select
                   key={filter}
-                  id={filter}
                   name={filter}
-                  className="flex-grow mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm bg-white dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                  defaultValue=""
+                  value={selectedFilter[filter]}
+                  onChange={handleInputChange}
+                  className="flex-grow mt-1 block w-full py-2 px-3 border rounded-md"
                 >
-                  <option value="" disabled>
-                    {filter.charAt(0).toUpperCase() + filter.slice(1)}
-                  </option>
-                  {filters[filter]?.map((option, index) => (
+                  <option value="">{filter.charAt(0).toUpperCase() + filter.slice(1)}</option>
+                  {filters[filterOptions[filter]]?.map((option, index) => (
                     <option key={index} value={option}>
                       {option}
                     </option>
@@ -46,17 +75,14 @@ const Filter = ({ showFilter, hideFilter, showSort, hideSort }) => {
                 </select>
               ))}
             </div>
-            <div className="flex pt-2 justify-center mb-10">
-                <a
-                  href="#"
-                  className="w-64 mt-3 px-5 p-3 text-base text-white text-center transition duration-300 ease-in-out border rounded-md cursor-pointer border-white bg-dark hover:bg-blue-dark"
-                >
-                  Submit
-                </a>
-              </div>
+            <button type="submit" className="w-64 mt-3 px-5 p-3 text-white bg-dark hover:bg-dark-3 rounded-md">
+              Submit
+            </button>
+          </form>
           </div>
         </div>
       </div>
+
       {/* Filter Mobile */}
       <div className="hideOnDesktop">
         <div className="w-full px-4">
@@ -97,25 +123,6 @@ const Filter = ({ showFilter, hideFilter, showSort, hideSort }) => {
               <p className="mt-1 py-2 mr-4" style={{ textAlign: 'left' }}>
                 Filtered By
               </p>
-              
-              {['years', 'genres', 'availability', 'awards'].map((filter) => (
-                <select
-                  key={filter}
-                  id={filter}
-                  name={filter}
-                  className="flex-grow mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm bg-white dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                  defaultValue=""
-                >
-                  <option value="" disabled>
-                    {filter.charAt(0).toUpperCase() + filter.slice(1)}
-                  </option>
-                  {filters[filter]?.map((option, index) => (
-                    <option key={index} value={option}>
-                      {option}
-                    </option>
-                  ))}
-                </select>
-              ))}
 
               {/* {['year', 'genre', 'availability', 'award'].map((filter) => (
                 <select
@@ -152,3 +159,47 @@ const Filter = ({ showFilter, hideFilter, showSort, hideSort }) => {
 };
 
 export default Filter;
+
+function showFilter() {
+  const filterMobile = document.querySelector('.filterMobile');
+  const filterButton = document.querySelector('.filterButton');
+  const hideFilterButton = document.querySelector('.hideFilterButton');
+
+  if (filterMobile && filterButton && hideFilterButton) {
+    filterMobile.style.display = 'flex';
+    filterButton.style.display = 'none';
+    hideFilterButton.style.display = 'flex';
+  } else {
+    console.error('Elemen tidak ditemukan');
+  }
+}
+
+function hideFilter() {
+  const filterMobile = document.querySelector('.filterMobile');
+  const filterButton = document.querySelector('.filterButton');
+  const hideFilterButton = document.querySelector('.hideFilterButton');
+
+  filterMobile.style.display = 'none';
+  filterButton.style.display = 'flex';
+  hideFilterButton.style.display = 'none';
+}
+
+function showSort() {
+  const sortMobile = document.querySelector('.sortMobile');
+  const sortButton = document.querySelector('.sortButton');
+  const hideSortButton = document.querySelector('.hideSortButton');
+
+  sortMobile.style.display = 'flex';
+  sortButton.style.display = 'none';
+  hideSortButton.style.display = 'flex';
+}
+
+function hideSort() {
+  const sortMobile = document.querySelector('.sortMobile');
+  const sortButton = document.querySelector('.sortButton');
+  const hideSortButton = document.querySelector('.hideSortButton');
+
+  sortMobile.style.display = 'none';
+  sortButton.style.display = 'flex';
+  hideSortButton.style.display = 'none';
+}

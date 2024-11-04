@@ -1,6 +1,7 @@
 import logo from "../../../public/images/logo.svg";
-import React from "react";
-import { usePage } from '@inertiajs/react';
+import React, { useState } from "react";
+import Search from "./Search";
+import AutenthicationButton from "./AutenthicationButton";
 
 function showSearch() {
   const searchForm = document.querySelector('.searchForm');
@@ -42,198 +43,120 @@ function hideSidebar() {
   closeButton.style.display = 'none';
 }
 
-export default function Navbar() {
-  const { props } = usePage();
-  const user = props.auth.user;
+
+export default function Navbar({searchQuery, handleSearchChange}) {
 
   return (
-    <div className="flex-col fixed header left-0 top-0 z-40 px-4 flex w-full items-center bg-dark">
-      {/* DESKTOP */}
+    <div className="flex-col fixed header left-0 top-0 z-40 flex w-full items-center bg-dark">
       <div className="flex items-center justify-between w-full">
         <div className="flex items-center w-full">
-          {/* logo */}
           <div className="w-60 max-w-full px-4 hideOnMobile">
             <a href="/" className="navbar-logo block w-full py-5">
-              <img
-                src={logo}
-                alt="logo"
-                className="header-logo w-full"
-              />
+              <img src={logo} alt="logo" className="header-logo w-full" />
             </a>
           </div>
-          {/* fitur */}
           <div className="w-full">
             <div className="flex w-full justify-between">
-              {/* form */}
-              <div>
-                <form className="flex items-center gap-3">
-                  <div className="hideOnMobile">
-                    <input
-                      type="text"
-                      placeholder="Masukkan judul"
-                      className="w-full px-10 py-3 text-base transition bg-transparent border rounded-md outline-none border-stroke dark:border-dark-3 text-white placeholder:text-dark-6 focus:border-primary dark:focus:border-primary focus-visible:shadow-none"
-                    />
-                  </div>
-                  <div className="hideOnMobile">
-                    <a
-                      href="/"
-                      className=" px-5 py-3 text-base text-white transition duration-300 ease-in-out border rounded-md cursor-pointer border-white bg-dark hover:bg-white hover:text-dark"
-                    >
-                      Telusuri
-                    </a>
-                  </div>
-                </form>
-              </div>
-              {/* autentikasi */}
-              <div className="hideOnMobile sm:flex items-center mr-4">
-                {user ? (
-                  <a
-                    href={route('profile.edit')}
-                    className="text-base font-medium text-white hover:text-primary"
-                  >
-                    Hello, {user.name}
-                  </a>
-                ) : (
-                  <>
-                    <a
-                      href="/login"
-                      className="loginBtn px-[22px] py-2 text-base font-medium text-white hover:text-primary"
-                    >
-                      Login
-                    </a>
-                    <a
-                      href="/register"
-                      className="signUpBtn rounded-md bg-white bg-opacity-20 px-6 py-2 text-base font-medium text-white duration-300 ease-in-out hover:bg-opacity-100 hover:text-dark"
-                    >
-                      Register
-                    </a>
-                  </>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      {/* MOBILE */}
-      <div className="flex items-center w-full">
-        <div className="flex items-center w-full">
-          {/* logo */}
-          <div className="w-60 max-w-full px-4 hideOnDesktop">
-            <a href="/" className="navbar-logo block w-full py-">
-              <img
-                src={logo}
-                alt="logo"
-                className="header-logo w-full"
+              <Search
+                searchQuery={searchQuery}
+                handleSearchChange={handleSearchChange}
               />
-            </a>
-          </div>
-          {/* fitur */}
-          <div className="hideOnDesktop w-full flex justify-end items-center">
-            {/* autentikasi */}
-            <div className="sm:flex items-center">
-              {user ? (
-                <a
-                  href={route('profile.edit')}
-                  className="text-sm font-medium text-white hover:text-primary"
-                >
-                  Hello, {user.name}
-                </a>
-              ) : (
-                <>
-                  <a
-                    href="/sign-in"
-                    className="hideOnDesktop loginBtn px-2 text-sm font-medium text-white hover:text-primary"
-                  >
-                    Sign In
-                  </a>
-                  <a
-                    href="/sign-up"
-                    className="hideOnDesktop signUpBtn rounded-md bg-white bg-opacity-20 px-2 py-2 text-sm font-medium text-white duration-300 ease-in-out hover:bg-opacity-100 hover:text-dark"
-                  >
-                    Sign Up
-                  </a>
-                </>
-              )}
-            </div>
-            {/* SEARCH BUTTON */}
-            <div className="searchButton p-4" onClick={showSearch}>
-              <a href="#">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  height="26px"
-                  viewBox="0 -960 960 960"
-                  width="26px"
-                  fill="#e8eaed"
-                >
-                  <path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z" />
-                </svg>
-              </a>
-            </div>
-            {/* CANCEL BUTTON */}
-            <div className="cancelButton p-4" onClick={hideSearchForm}>
-              <a href="#">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  height="26px"
-                  viewBox="0 -960 960 960"
-                  width="26px"
-                  fill="#e8eaed"
-                >
-                  <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
-                </svg>
-              </a>
-            </div>
-            {/* MENU BUTTON */}
-            <div className="sidebarButton mr-3" onClick={showSidebar}>
-              <a href="#">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  height="26px"
-                  viewBox="0 -960 960 960"
-                  width="26px"
-                  fill="#e8eaed"
-                >
-                  <path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z" />
-                </svg>
-              </a>
-            </div>
-            {/* CANCEL BUTTON */}
-            <div className="closeButton mr-3" onClick={hideSidebar}>
-              <a href="#">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  height="26px"
-                  viewBox="0 -960 960 960"
-                  width="26px"
-                  fill="#e8eaed"
-                >
-                  <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
-                </svg>
-              </a>
+              <AutenthicationButton />
             </div>
           </div>
         </div>
       </div>
-      {/* FORM */}
-      <div className="searchForm">
-        <form className="flex items-center gap-1 mx-2 my-2">
-          <div className="hideOnDesktop">
-            <input
-              type="text"
-              placeholder="Masukkan judul"
-              className="w-full px-10 py-3 text-base transition bg-transparent border rounded-md outline-none border-stroke dark:border-dark-3 text-white placeholder:text-dark-6 focus:border-primary dark:focus:border-primary focus-visible:shadow-none"
-            />
-          </div>
-          <div className="hideOnDesktop">
-            <a
-              href="/"
-              className="px-5 py-3 mx-2 text-base text-white transition duration-300 ease-in-out border rounded-md cursor-pointer border-white bg-dark hover:bg-white hover:text-dark"
+
+  
+  {/* MOBILE */}
+  <div className="flex items-center w-full">
+    <div className="flex items-center w-full">
+      {/* logo */}
+      <div className="w-60 max-w-full px-4 hideOnDesktop">
+        <a href="/" className="navbar-logo block w-full py-5">
+          <img
+            src={logo}
+            alt="logo"
+            className="header-logo w-full"
+          />
+        </a>
+      </div>
+      {/* fitur */}
+      <div className="w-full flex justify-end items-center">
+        {/* autentikasi */}
+        <div className="sm:flex items-center">
+          <a
+            href="/sign-in"
+            className="hideOnDesktop loginBtn px-2 text-sm font-medium text-white hover:text-primary"
+          >
+            Sign In
+          </a>
+          <a
+            href="/sign-up"
+            className="hideOnDesktop signUpBtn rounded-md bg-white bg-opacity-20 px-2 py-2 text-sm font-medium text-white duration-300 ease-in-out hover:bg-opacity-100 hover:text-dark"
+          >
+            Sign Up
+          </a>
+        </div>
+        {/* SEARCH BUTTON */}
+        <div className="searchButton p-4" onClick={showSearch}>
+          <a href="#">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="26px"
+              viewBox="0 -960 960 960"
+              width="26px"
+              fill="#e8eaed"
             >
-              Telusuri
-            </a>
-          </div>
-        </form>
+              <path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z" />
+            </svg>
+          </a>
+        </div>
+        {/* CANCEL BUTTON */}
+        <div className="cancelButton p-4" onClick={hideSearchForm}>
+          <a href="#">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="26px"
+              viewBox="0 -960 960 960"
+              width="26px"
+              fill="#e8eaed"
+            >
+              <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
+            </svg>
+          </a>
+        </div>
+        {/* MENU BUTTON */}
+        <div className="sidebarButton mr-3" onClick={showSidebar}>
+          <a href="#">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="26px"
+              viewBox="0 -960 960 960"
+              width="26px"
+              fill="#e8eaed"
+            >
+              <path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z" />
+            </svg>
+          </a>
+        </div>
+        {/* CANCEL BUTTON */}
+        <div className="closeButton mr-3" onClick={hideSidebar}>
+          <a href="#">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="26px"
+              viewBox="0 -960 960 960"
+              width="26px"
+              fill="#e8eaed"
+            >
+              <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
+            </svg>
+          </a>
+        </div>
       </div>
     </div>
+  </div>
+  </div>
   );
 }

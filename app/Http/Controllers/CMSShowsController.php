@@ -30,7 +30,7 @@ class CMSShowsController extends Controller
             ];
         });
 
-        return Inertia::render('CMS/CMSShows', [
+        return Inertia::render('CMS/CMSInputShow', [
             'movies' => $movies      
         ]);
     }
