@@ -11,7 +11,7 @@ class AwardController extends Controller
 {
     public function index()
     {
-        $awards = Award::with(['country'])->get();
+        $awards = Award::with(['country'])->orderBy('created_at', 'desc')->get();
         $countries = Country::all();
     
         return Inertia::render('CMS/CMSAwards', [
@@ -54,14 +54,13 @@ class AwardController extends Controller
             'name' => 'required|string|max:255',
             'country_id' => 'required|exists:countries,id',
             'year' => 'required|integer|min:1900|max:' . date('Y'),
-            'movie_id' => 'nullable|exists:movies,id',
         ]);
 
         $award = Award::findOrFail($id);
         $award->name = $request->input('name');
         $award->country_id = $request->input('country_id');
         $award->year = $request->input('year');
-        $award->movie_id = $request->input('movie_id');
+        $award->movie_id = $request->input('movie_id') ?? null;
         $award->save();
 
         return redirect()->route('cms.awards')->with('success', 'Award updated successfully.');

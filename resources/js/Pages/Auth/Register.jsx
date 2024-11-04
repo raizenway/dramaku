@@ -20,23 +20,26 @@ export default function Register() {
 
     const submit = (e) => {
         e.preventDefault();
-
-        // Reset all error states
+    
         setEmailTakenError(false);
         setEmailFormatError(false);
         setPasswordRequirementError(false);
         setPasswordMismatchError(false);
-
-        // Check if passwords match before sending the request
+    
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(data.email)) {
+            setEmailFormatError(true);
+            return;
+        }
+    
         if (data.password !== data.password_confirmation) {
             setPasswordMismatchError(true);
             return;
         }
-
+    
         post(route('register'), {
             onFinish: () => reset('password', 'password_confirmation'),
             onError: (err) => {
-                // Check if error is due to email being taken
                 if (err.email) {
                     if (err.email.includes('already been taken')) {
                         setEmailTakenError(true);
@@ -44,7 +47,6 @@ export default function Register() {
                         setEmailFormatError(true);
                     }
                 }
-                // Check if error is due to password requirements
                 if (err.password) {
                     setPasswordRequirementError(true);
                 }
@@ -55,8 +57,6 @@ export default function Register() {
     return (
         <AuthFormLayout>
             <Head title="Register" />
-
-            {/* Display error messages at the top of the form */}
             {(emailTakenError || emailFormatError || passwordMismatchError || passwordRequirementError) && (
                 <div className="mb-4">
                     {emailTakenError && <p className="text-red-600 text-sm">This email is already in use.</p>}
@@ -81,10 +81,10 @@ export default function Register() {
                     value={data.email}
                     onChange={(e) => {
                         setData('email', e.target.value);
-                        setEmailTakenError(false); // Reset email error on change
-                        setEmailFormatError(false); // Reset email format error on change
+                        setEmailTakenError(false);
+                        setEmailFormatError(false); 
                     }}
-                    hasError={errors.email || emailTakenError || emailFormatError} // Show red border if email is taken or format is wrong
+                    hasError={errors.email || emailTakenError || emailFormatError}
                     required
                 />
 
@@ -94,9 +94,9 @@ export default function Register() {
                     value={data.password}
                     onChange={(e) => {
                         setData('password', e.target.value);
-                        setPasswordRequirementError(false); // Reset password requirement error on change
+                        setPasswordRequirementError(false);
                     }}
-                    hasError={passwordRequirementError || passwordMismatchError} // Highlight password field if there's a requirement or mismatch error
+                    hasError={passwordRequirementError || passwordMismatchError}
                     required
                 />
 
@@ -106,9 +106,9 @@ export default function Register() {
                     value={data.password_confirmation}
                     onChange={(e) => {
                         setData('password_confirmation', e.target.value);
-                        setPasswordMismatchError(false); // Reset password mismatch error on change
+                        setPasswordMismatchError(false);
                     }}
-                    hasError={passwordMismatchError} // Highlight confirm password field if there's a mismatch
+                    hasError={passwordMismatchError}
                     required
                 />
 
@@ -117,7 +117,11 @@ export default function Register() {
                     text="Sign Up with Google"
                     icon={google}
                     isPrimary={false}
-                    onClick={() => window.location.href = route('google.auth')}
+                    onClick={(e) => {
+                        e.preventDefault();
+                        window.location.href = route('google.auth');
+                    }}
+                    type="button"
                 />
             </form>
             <p className="text-base text-body-secondary mt-4">

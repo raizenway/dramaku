@@ -40,12 +40,13 @@ const CMSModal = ({
                 </section>
 
                 <div className="flex justify-end p-4">
-                    <button
-                        className="bg-primary text-white py-2 px-4 rounded hover:bg-blue-dark mr-2"
-                        onClick={onClose}
+                <button
+                    onClick={onConfirm}
+                    className={`py-2 px-4 rounded ${isDangerousAction ? 'bg-red-500 hover:bg-red-600' : 'bg-primary hover:bg-blue-dark'} text-white`}
                     >
-                        Accept
-                    </button>
+                    {isDangerousAction ? 'Confirm' : 'Submit'}
+                </button>
+
                     <button
                         className="bg-gray-300 text-dark py-2 px-4 rounded hover:bg-gray-400 mr-2"
                         onClick={onClose}

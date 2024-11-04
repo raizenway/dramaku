@@ -9,9 +9,11 @@ return new class extends Migration
     public function up()
     {
         Schema::create('actors', function (Blueprint $table) {
-            $table->id();
-            $table->string('name', 255)->nullable();
+            $table->id()->primary();
+            $table->string('name', 255);
             $table->string('photo_url', 255)->nullable();
+            $table->foreignId('country_id')->nullable()->constrained('countries')->onDelete('set null');
+            $table->date('birth')->nullable();
             $table->timestamps();
         });
     }

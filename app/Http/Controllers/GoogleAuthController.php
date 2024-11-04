@@ -15,41 +15,36 @@ class GoogleAuthController extends Controller
     {
         return Socialite::driver('google')->redirect();
     }
-
+    
     public function callback(Request $request)
     {
         try {
             if ($request->has('error')) {
                 return redirect('/login')->with('error', 'Google login was cancelled.');
             }
-
+    
             $google_user = Socialite::driver('google')->user();
-            $user = User::where('googleAuth', $google_user->getId())->first();
-
+            $user = User::where('googleAuth', $google_user->getId())->orWhere('email', $google_user->getEmail())->first();
+    
             if (!$user) {
-                $user = User::where('email', $google_user->getEmail())->first();
-
-                if ($user) {
-                    $user->update([
-                        'googleAuth' => $google_user->getId(),
-                    ]);
-                } else {
-                    $user = User::create([
-                        'name' => $google_user->getName(),
-                        'email' => $google_user->getEmail(),
-                        'googleAuth' => $google_user->getId(),
-                        'password' => Hash::make(uniqid()),
-                        'role' => 'user',
-                    ]);
-                }
+                $user = User::create([
+                    'name' => $google_user->getName(),
+                    'email' => $google_user->getEmail(),
+                    'role' => 'user',
+                    'googleAuth' => $google_user->getId(),
+                    'password' => Hash::make(uniqid()),
+                ]);
             }
-
+    
+            if ($user->role === 'suspended') {
+                return redirect('/login')->with('error', 'suspended');
+            }            
+    
             Auth::login($user);
             return redirect()->intended('/');
-        
+    
         } catch (\Throwable $th) {
-            dd('something went wrong! ' . $th->getMessage());
             return redirect('/login')->with('error', 'Something went wrong during Google login.');
         }
-    }   
+    }
 }

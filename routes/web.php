@@ -68,20 +68,29 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::delete('/cms-actors/{actor}', [ActorController::class, 'destroy'])->name('cms.actors.destroy');
 
     Route::get('/cms-reviews', [ReviewController::class, 'index'])->name('cms.reviews');
-   
-    Route::post('/movies/{id}/reviews', [ReviewController::class, 'store'])->name('reviews.store');
-    
+    Route::put('/cms-reviews/{id}/status', [ReviewController::class, 'updateStatus']);
+
     Route::get('/cms-users', [UserController::class, 'index'])->name('cms.users');
+    Route::put('/cms-users/{user}/suspend', [UserController::class, 'suspend'])->name('cms.users.suspend');
 
 });
 
 Route::middleware('auth')->group(function () {
+    Route::post('/review', [ReviewController::class, 'store'])->name('reviews.store');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::post('/review', [ReviewController::class, 'store'])->name('reviews.store');
+
 });
 
 Route::get('auth/google', [GoogleAuthController::class, 'redirect'])->name('google.auth');
 Route::get('auth/google/callback', [GoogleAuthController::class, 'callback']);
+
+Route::get('/login', function () {
+    return Inertia::render('Auth/Login', [
+        'error' => session('error'),
+    ]);
+})->name('login');
 
 require __DIR__.'/auth.php';

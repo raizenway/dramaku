@@ -9,12 +9,12 @@ return new class extends Migration
     public function up()
     {
         Schema::create('movies', function (Blueprint $table) {
-            $table->id();
+            $table->id()->primary();
             $table->string('title', 255);
             $table->string('alternative_title', 255)->nullable();
             $table->text('photo_url');
             $table->integer('year');
-            $table->foreignId('country_id')->constrained('countries');
+            $table->foreignId('country_id')->nullable()->constrained('countries')->onDelete('set null');
             $table->text('synopsis');
             $table->text('link_trailer')->nullable();
             $table->timestamps();

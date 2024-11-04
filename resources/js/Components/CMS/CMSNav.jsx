@@ -86,6 +86,7 @@ const CMSNav = () => {
         title="Confirm Logout"
         message="Are you sure you want to logout?"
         onConfirm={handleLogout}
+        isDangerousAction={true}
         onCancel={() => setShowLogoutConfirm(false)}
       />
     </>

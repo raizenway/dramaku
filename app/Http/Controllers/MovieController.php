@@ -45,7 +45,22 @@ class MovieController extends Controller
 
     public function getCountries()
     {
-        
+        $movies = Movie::with(['genres', 'country', 'reviews' => function ($query) {
+            $query->where('status', 'approved');
+        }])->get();
+
+        $movies = $movies->map(function ($movie) {
+            return [
+                'id' => $movie->id,
+                'title' => $movie->title,
+                'otherTitle' => $movie->alternative_title,
+                'year' => $movie->year,
+                'rating' => ($movie->reviews->avg('rate') ?? 0),
+                'photo_url' => $movie->photo_url,
+                'genres' => $movie->genres->pluck('name'),
+                'country' => $movie->country->name,
+            ];
+        });
 
         return Inertia::render('Home', [
             'countries' => $countries
@@ -84,8 +99,32 @@ class MovieController extends Controller
 
     public function show($id)
     {
-        $movie = Movie::with(['country', 'genres', 'actors', 'reviews.user', 'platforms'])
-            ->findOrFail($id);
+        $movie = Movie::with([
+            'country', 
+            'genres', 
+            'actors', 
+            'platforms', 
+            'awards',
+            'reviews.user'
+        ])->findOrFail($id);
+    
+        $userReview = null;
+        if (auth()->check()) {
+            $userReview = $movie->reviews()->where('user_id', auth()->id())->first();
+        }
+    
+        $approvedReviews = $movie->reviews()
+            ->where('status', 'approved')
+            ->orderBy('created_at', 'asc')
+            ->get()
+            ->map(function ($review) {
+                return [
+                    'author' => $review->user->name,
+                    'email' => $review->user->email,
+                    'content' => $review->comment,
+                    'rating' => $review->rate,
+                ];
+            });
     
         return Inertia::render('DetailPage', [
             'movie' => [
@@ -105,16 +144,16 @@ class MovieController extends Controller
                         'image' => $actor->photo_url,
                     ];
                 }),
-                'reviews' => $movie->reviews->map(function ($review) {
-                    return [
-                        'author' => $review->user->name,
-                        'email' => $review->user->email,
-                        'content' => $review->comment,
-                        'rating' => $review->rate,
-                    ];
-                }),
-            ]
+                'reviews' => $approvedReviews,
+                'awards' => $movie->awards->pluck('name'),
+            ],
+            'userReview' => $userReview ? [
+                'id' => $userReview->id,
+                'status' => $userReview->status,
+                'rate' => $userReview->rate,
+                'comment' => $userReview->comment,
+            ] : null,
+            'user' => auth()->user(),
         ]);
     }
-    
 }

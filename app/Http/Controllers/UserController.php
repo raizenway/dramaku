@@ -10,18 +10,20 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::all();
-
+        $users = User::orderBy('created_at', 'asc')->get();
+    
         return Inertia::render('CMS/CMSUsers', [
             'users' => $users->map(function ($user) {
                 return [
                     'id' => $user->id,
                     'username' => $user->name,
                     'email' => $user->email,
+                    'role' => $user->role,
                 ];
             }),
         ]);
-    }
+    }     
+
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -53,6 +55,14 @@ class UserController extends Controller
 
         return redirect()->route('cms.users')->with('success', 'User updated successfully.');
     }
+    public function suspend(User $user)
+    {
+        $user->role = $user->role === 'suspended' ? 'user' : 'suspended';
+        $user->save();
+    
+        return redirect()->route('cms.users')->with('status', 'User status updated successfully');
+    }
+
     public function destroy($id)
     {
         $user = User::findOrFail($id);
