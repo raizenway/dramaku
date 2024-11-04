@@ -15,9 +15,13 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 
-Route::get('/', [MovieController::class, 'index'])->name('home');
-
-Route::get('/movies', [MovieController::class, 'index']);
+Route::get('/', function () {
+    $user = auth()->user();
+    if ($user && $user->role === 'admin') {
+        return redirect()->route('cms.shows');
+    }
+    return app(MovieController::class)->index();
+})->name('home');
 
 Route::get('/detail', function () {
     return Inertia::render('DetailPage');

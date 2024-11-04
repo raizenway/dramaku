@@ -17,15 +17,6 @@ export default function Sidebar({ user, countries }) {
     <>
       {/* DESKTOP SIDEBAR */}
       <div className="hideOnMobile w-1/6 bg-dark hide">
-        <a className="mx-8 mt-8 mb-4 inline-block text-xl font-semibold text-white dark:text-white sm:text-2xl lg:text-xl xl:text-2xl">
-          Admin
-        </a>
-        <Link
-          href={route('cms.countries')}
-          className="mx-8 flex py-2 text-base font-medium text-white hover:text-primary"
-        >
-          Content Management
-        </Link>
         <h1 className="mx-8 mt-8 mb-4 inline-block text-xl font-semibold text-white dark:text-white sm:text-2xl lg:text-xl xl:text-2xl">
           Region
         </h1>

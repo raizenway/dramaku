@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 
 function MovieCard({ id, poster, title, year, genres, rating }) {
-    const displayRating = rating === null ? 0 : rating;
+    const displayRating = rating === null ? 0 : rating.toFixed(1);
     const handleCardClick = () => {
       window.location.href = `/movie/${id}`;
     };
@@ -43,7 +43,7 @@ function MovieCard({ id, poster, title, year, genres, rating }) {
         </div>
         <div className="flex mt-1">
           <p className="w-full text-base text-body-color dark:text-dark-6">
-            Rate {displayRating}/10
+            Rate {displayRating}/5
           </p>
         </div>
       </div>
