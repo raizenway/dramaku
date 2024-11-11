@@ -1,8 +1,9 @@
-import { Link, useForm } from '@inertiajs/react';
+import { Link, useForm, usePage } from '@inertiajs/react';
 import { useState } from 'react';
-import { usePage} from '@inertiajs/react';
 
-export default function Sidebar({ user, countries, onCountrySelect, selectedCountry }) {
+export default function Sidebar({ countries, onCountrySelect, selectedCountry }) {
+  const { props } = usePage();
+  const user = props.auth.user;
   const isAdmin = user && user.role === 'admin';
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const { post } = useForm();
@@ -11,6 +12,7 @@ export default function Sidebar({ user, countries, onCountrySelect, selectedCoun
     post(route('logout'));
     setShowLogoutConfirm(false);
   };
+
 
   return (
     <>
@@ -38,6 +40,26 @@ export default function Sidebar({ user, countries, onCountrySelect, selectedCoun
             {country.name || country}
           </a>
         ))}
+        <div className='mx-8 mt-10 '>
+        {isAdmin && (
+            <Link 
+            href={route('cms.shows')} 
+            className={`flex py-2 text-base text-white font-medium hover:text-primary`}
+            >
+            CMS
+            </Link>
+          )}
+        {/* Only show logout if user is logged in */}
+        {user && (
+          <button
+            onClick={() => setShowLogoutConfirm(true)}
+            className="flex py-2 text-base font-medium text-white hover:text-red-500"
+          >
+            Logout
+          </button>
+        )}
+        </div>
+        
       </div>
 
       {/* MOBILE SIDEBAR */}
@@ -80,12 +102,6 @@ export default function Sidebar({ user, countries, onCountrySelect, selectedCoun
           >
             Korea
           </a>
-          <button
-            onClick={() => setShowLogoutConfirm(true)}
-            className="mx-8 mt-16 flex py-2 text-base font-medium text-white hover:text-red-500"
-          >
-            Logout
-          </button>
         </div>
       </div>
 
@@ -104,7 +120,7 @@ export default function Sidebar({ user, countries, onCountrySelect, selectedCoun
               </button>
               <button
                 onClick={handleLogout}
-                className="py-2 px-4 bg-gray-300 text-base rounded hover:bg-red-600"
+                className="py-2 px-4 bg-gray-300 text-base rounded hover:bg-red-600 hover:text-white"
               >
                 Logout
               </button>

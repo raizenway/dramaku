@@ -96,8 +96,8 @@ class MovieController extends Controller
         }
     
         $approvedReviews = $movie->reviews()
-            ->where('status', 'Approved')
-            ->orderBy('created_at', 'asc')
+            ->where('status', 'approved')
+            // ->orderBy('created_at', 'asc')
             ->get()
             ->map(function ($review) {
                 return [
@@ -108,7 +108,8 @@ class MovieController extends Controller
                 ];
             });
 
-    
+        // dd($approvedReviews);
+
         return Inertia::render('DetailPage', [
             'movie' => [
                 'id' => $movie->id,

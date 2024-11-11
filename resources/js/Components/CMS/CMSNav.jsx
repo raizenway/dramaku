@@ -7,6 +7,8 @@ const CMSNav = () => {
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const { post } = useForm();
 
+  
+
   const handleLogout = () => {
     post(route('logout'));
     setShowLogoutConfirm(false);
@@ -31,13 +33,13 @@ const CMSNav = () => {
           <div className="ml-8">
             <Link 
               href={route('cms.shows.validate')} 
-              className={`mx-8 flex py-2 text-base font-medium hover:text-primary ${url === route('cms.shows') ? 'border-l-4 pl-4 border-primary' : ''}`}
+              className={`mx-8 flex py-2 text-base font-medium text-gray-400 hover:text-primary ${url === route('cms.shows') ? 'border-l-4 pl-4 border-primary' : ''}`}
             >
               Validate
             </Link>
             <Link 
               href={route('cms.show.input')} 
-              className={`mx-8 flex py-2 text-base font-medium hover:text-primary ${url === route('cms.show.input') ? 'border-l-4 pl-4 border-primary' : ''}`}
+              className={`mx-8 flex py-2 text-base font-medium text-gray-400 hover:text-primary ${url === route('cms.show.input') ? 'border-l-4 pl-4 border-primary' : ''}`}
             >
               Input New Shows
             </Link>

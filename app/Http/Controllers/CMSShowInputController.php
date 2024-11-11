@@ -34,7 +34,7 @@ class CMSShowInputController extends Controller
 
     public function store(Request $request)
     {
-        dd($request->all());
+        
 
         $request->merge([
             'awards' => json_decode($request->input('awards'), true),

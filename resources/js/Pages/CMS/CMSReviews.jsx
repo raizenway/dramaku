@@ -77,7 +77,7 @@ const CMSReviews = () => {
                                     <td className="px-2 py-4">{review.movie?.title || "Unknown Movie"}</td>
                                     <td className="px-2 py-4">{review.comment}</td>
                                     <td className="px-2 py-4 text-center">
-                                        {review.status.charAt(0).toUpperCase() + review.status.slice(1)}
+                                        {review.status ? review.status.charAt(0).toUpperCase() + review.status.slice(1) : "Unknown Status"}
                                     </td>
                                     <td className="px-2 py-4 text-center">
                                         <div>

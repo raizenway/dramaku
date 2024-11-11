@@ -9,6 +9,7 @@ import Pagination from '../Components/Home/Pagination';
 
 
 export default function Home() {
+  
   const { movies } = usePage().props;
   const { countries } = usePage().props;
   const [searchQuery, setSearchQuery] = useState('');
@@ -20,7 +21,7 @@ export default function Home() {
     availability: '',
     award: ''
   });
-  const itemsPerPage = 5;
+  const itemsPerPage = 10;
 
   const totalPages = Math.ceil(filteredMovies.length / itemsPerPage);
   const indexOfLastMovie = currentPage * itemsPerPage;
