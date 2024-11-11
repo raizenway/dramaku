@@ -16,6 +16,12 @@ const CMSNav = () => {
     <>
       <div className="bg-dark text-white space-y-6 py-7 px-1 w-70 hidden md:block">
         <nav>
+        <Link 
+            href={route('cms.movies.index')} 
+            className={`mx-8 flex py-2 text-base font-medium hover:text-primary`}
+          >
+            Home
+          </Link>
           <Link 
             href={route('cms.shows')} 
             className={`mx-8 flex py-2 text-base font-medium hover:text-primary`}
@@ -24,7 +30,7 @@ const CMSNav = () => {
           </Link>
           <div className="ml-8">
             <Link 
-              href={route('cms.shows')} 
+              href={route('cms.shows.validate')} 
               className={`mx-8 flex py-2 text-base font-medium hover:text-primary ${url === route('cms.shows') ? 'border-l-4 pl-4 border-primary' : ''}`}
             >
               Validate

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('country_id')->nullable()->constrained('countries')->onDelete('set null');
             $table->text('synopsis');
             $table->text('link_trailer')->nullable();
+            $table->enum('status', ['Pending', 'Approved', 'Rejected'])->default('Pending');
             $table->timestamps();
         });
     }

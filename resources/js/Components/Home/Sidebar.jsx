@@ -2,8 +2,7 @@ import { Link, useForm } from '@inertiajs/react';
 import { useState } from 'react';
 import { usePage} from '@inertiajs/react';
 
-export default function Sidebar({ user, countries }) {
-  console.log("countries: ", countries);
+export default function Sidebar({ user, countries, onCountrySelect, selectedCountry }) {
   const isAdmin = user && user.role === 'admin';
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const { post } = useForm();
@@ -20,13 +19,23 @@ export default function Sidebar({ user, countries }) {
         <h1 className="mx-8 mt-8 mb-4 inline-block text-xl font-semibold text-white dark:text-white sm:text-2xl lg:text-xl xl:text-2xl">
           Region
         </h1>
+        <a
+          onClick={() => onCountrySelect(null)}
+          className={`mx-8 flex py-2 text-base font-medium hover:text-primary 
+            ${selectedCountry === null ? 'text-gray-500 cursor-not-allowed' : 'text-white cursor-pointer'}`}
+          style={{ pointerEvents: selectedCountry === null ? 'none' : 'auto' }}
+        >
+          Semua
+        </a>
         {countries && countries.map((country, index) => (
           <a
             key={index}
-            href="#"
-            className="mx-8 flex py-2 text-base font-medium text-white hover:text-primary"
+            onClick={() => onCountrySelect(country.name || country)}
+            className={`mx-8 flex py-2 text-base font-medium hover:text-primary 
+              ${selectedCountry === (country.name || country) ? 'text-gray-500 cursor-not-allowed' : 'text-white cursor-pointer'}`}
+            style={{ pointerEvents: selectedCountry === (country.name || country) ? 'none' : 'auto' }}
           >
-            {country}
+            {country.name || country}
           </a>
         ))}
       </div>

@@ -10,7 +10,9 @@ class CMSShowsController extends Controller
 {
     public function index()
     {
-        $movies = Movie::with(['genres', 'country', 'reviews', 'platforms', 'actors'])->get();
+        $movies = Movie::with(['genres', 'country', 'reviews', 'platforms', 'actors'])
+                    ->where('status', 'Approved')
+                    ->get();
 
         $movies = $movies->map(function ($movie) {
             return [
@@ -22,6 +24,7 @@ class CMSShowsController extends Controller
                 'photo_url' => $movie->photo_url,
                 'genres' => $movie->genres->pluck('name'),
                 'country' => $movie->country->name,
+                'status' => $movie->status,
                 'synopsis' => $movie->synopsis,
                 'platforms' => $movie->platforms->pluck('name'),
                 'trailerUrl' => $movie->link_trailer,
@@ -30,7 +33,7 @@ class CMSShowsController extends Controller
             ];
         });
 
-        return Inertia::render('CMS/CMSInputShow', [
+        return Inertia::render('CMS/CMSShows', [
             'movies' => $movies      
         ]);
     }

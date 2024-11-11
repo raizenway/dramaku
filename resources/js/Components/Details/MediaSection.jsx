@@ -15,7 +15,7 @@ const MediaSection = ({ poster, trailerUrl }) => {
                         </div>
                     ) : (
                         <img
-                            src={poster}
+                            src={poster.startsWith("http") ? poster : `/${poster}`}
                             alt="Movie Poster"
                             className="absolute inset-0 w-full h-full object-cover rounded-lg"
                             onError={() => setIsPosterBroken(true)}
