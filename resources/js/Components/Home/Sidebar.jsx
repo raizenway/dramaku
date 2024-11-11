@@ -1,9 +1,9 @@
-import { Link, useForm } from '@inertiajs/react';
+import { Link, useForm, usePage } from '@inertiajs/react';
 import { useState } from 'react';
-import { usePage} from '@inertiajs/react';
 
-export default function Sidebar({ user, countries }) {
-  console.log("countries: ", countries);
+export default function Sidebar({ countries, onCountrySelect, selectedCountry }) {
+  const { props } = usePage();
+  const user = props.auth.user;
   const isAdmin = user && user.role === 'admin';
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const { post } = useForm();
@@ -13,6 +13,7 @@ export default function Sidebar({ user, countries }) {
     setShowLogoutConfirm(false);
   };
 
+
   return (
     <>
       {/* DESKTOP SIDEBAR */}
@@ -20,15 +21,45 @@ export default function Sidebar({ user, countries }) {
         <h1 className="mx-8 mt-8 mb-4 inline-block text-xl font-semibold text-white dark:text-white sm:text-2xl lg:text-xl xl:text-2xl">
           Region
         </h1>
+        <a
+          onClick={() => onCountrySelect(null)}
+          className={`mx-8 flex py-2 text-base font-medium hover:text-primary 
+            ${selectedCountry === null ? 'text-gray-500 cursor-not-allowed' : 'text-white cursor-pointer'}`}
+          style={{ pointerEvents: selectedCountry === null ? 'none' : 'auto' }}
+        >
+          Semua
+        </a>
         {countries && countries.map((country, index) => (
           <a
             key={index}
-            href="#"
-            className="mx-8 flex py-2 text-base font-medium text-white hover:text-primary"
+            onClick={() => onCountrySelect(country.name || country)}
+            className={`mx-8 flex py-2 text-base font-medium hover:text-primary 
+              ${selectedCountry === (country.name || country) ? 'text-gray-500 cursor-not-allowed' : 'text-white cursor-pointer'}`}
+            style={{ pointerEvents: selectedCountry === (country.name || country) ? 'none' : 'auto' }}
           >
-            {country}
+            {country.name || country}
           </a>
         ))}
+        <div className='mx-8 mt-10 '>
+        {isAdmin && (
+            <Link 
+            href={route('cms.shows')} 
+            className={`flex py-2 text-base text-white font-medium hover:text-primary`}
+            >
+            CMS
+            </Link>
+          )}
+        {/* Only show logout if user is logged in */}
+        {user && (
+          <button
+            onClick={() => setShowLogoutConfirm(true)}
+            className="flex py-2 text-base font-medium text-white hover:text-red-500"
+          >
+            Logout
+          </button>
+        )}
+        </div>
+        
       </div>
 
       {/* MOBILE SIDEBAR */}
@@ -71,12 +102,6 @@ export default function Sidebar({ user, countries }) {
           >
             Korea
           </a>
-          <button
-            onClick={() => setShowLogoutConfirm(true)}
-            className="mx-8 mt-16 flex py-2 text-base font-medium text-white hover:text-red-500"
-          >
-            Logout
-          </button>
         </div>
       </div>
 
@@ -95,7 +120,7 @@ export default function Sidebar({ user, countries }) {
               </button>
               <button
                 onClick={handleLogout}
-                className="py-2 px-4 bg-gray-300 text-base rounded hover:bg-red-600"
+                className="py-2 px-4 bg-gray-300 text-base rounded hover:bg-red-600 hover:text-white"
               >
                 Logout
               </button>

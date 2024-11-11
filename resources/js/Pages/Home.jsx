@@ -9,11 +9,9 @@ import Pagination from '../Components/Home/Pagination';
 
 
 export default function Home() {
+  
   const { movies } = usePage().props;
   const { countries } = usePage().props;
-  console.log("movies: ", movies);
-
-
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredMovies, setFilteredMovies] = useState(movies);
   const [currentPage, setCurrentPage] = useState(1);
@@ -23,12 +21,18 @@ export default function Home() {
     availability: '',
     award: ''
   });
-  const itemsPerPage = 5;
+  const itemsPerPage = 10;
 
   const totalPages = Math.ceil(filteredMovies.length / itemsPerPage);
   const indexOfLastMovie = currentPage * itemsPerPage;
   const indexOfFirstMovie = indexOfLastMovie - itemsPerPage;
   const currentMovies = filteredMovies.slice(indexOfFirstMovie, indexOfLastMovie);
+  const [selectedCountry, setSelectedCountry] = useState(null);
+
+  const handleCountrySelect = (countries) => {
+    setSelectedCountry(countries);
+    setCurrentPage(1);
+  }
 
   const handlePageChange = (page) => {
     if (page < 1 || page > totalPages) return;
@@ -48,6 +52,8 @@ export default function Home() {
     if (!movies || movies.length === 0) return;
 
     const filtered = movies.filter((movie) => {
+      const matchesCountry = !selectedCountry || movie.country === selectedCountry;
+      
       const matchesSearch =
         movie.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         movie.actors.some((actor) =>
@@ -62,19 +68,18 @@ export default function Home() {
           (selectedFilter.award === 'Yes' && movie.awards.length > 0) || 
           (selectedFilter.award === 'No' && movie.awards.length === 0));
 
-      return matchesSearch && matchesFilter;
+      return matchesSearch && matchesFilter && matchesCountry;
+      
     });
 
     setFilteredMovies(filtered);
-  }, [searchQuery, selectedFilter, movies]);
-
-  
+  }, [searchQuery, selectedFilter, selectedCountry, movies]);
 
   return (
     <>
-      <Navbar searchQuery={searchQuery} handleSearchChange={handleSearchChange} />
+      <Navbar searchQuery={searchQuery} handleSearchChange={handleSearchChange}/>
       <div className="flex mt-16 justify-center">
-        <Sidebar countries={countries}/>
+        <Sidebar countries={countries} onCountrySelect={handleCountrySelect} selectedCountry={selectedCountry}/>
         <div className="w-11/12 pb-10 lg:pb-20">
           <div className="container mx-auto">
             <Filter onFilterSubmit={handleFilterSubmit} />

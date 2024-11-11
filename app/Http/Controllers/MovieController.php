@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Award;
+use App\Models\Actor;
 use App\Models\Movie;
 use App\Models\Genre;
 use App\Models\Platform;
@@ -43,34 +45,14 @@ class MovieController extends Controller
         ]);
     }
 
-    public function getCountries()
-    {
-        $movies = Movie::with(['genres', 'country', 'reviews' => function ($query) {
-            $query->where('status', 'approved');
-        }])->get();
-
-        $movies = $movies->map(function ($movie) {
-            return [
-                'id' => $movie->id,
-                'title' => $movie->title,
-                'otherTitle' => $movie->alternative_title,
-                'year' => $movie->year,
-                'rating' => ($movie->reviews->avg('rate') ?? 0),
-                'photo_url' => $movie->photo_url,
-                'genres' => $movie->genres->pluck('name'),
-                'country' => $movie->country->name,
-            ];
-        });
-
-        return Inertia::render('Home', [
-            'countries' => $countries
-        ]);
-    }
-
     public function index()
         {
-            $countries = Country::select('name')->orderBy('name')->pluck('name');
-            $movies = Movie::with(['genres', 'country', 'reviews', 'actors', 'platforms', 'awards'])->get();
+            $countries = Country::whereIn('id', Movie::select('country_id'))
+                            ->orderBy('name')
+                            ->pluck('name');
+            $movies = Movie::with(['genres', 'country', 'reviews', 'actors', 'platforms', 'awards'])
+                        ->where('status', 'Approved')
+                        ->get();
 
             $movies = $movies->map(function ($movie) {
             
@@ -115,7 +97,7 @@ class MovieController extends Controller
     
         $approvedReviews = $movie->reviews()
             ->where('status', 'approved')
-            ->orderBy('created_at', 'asc')
+            // ->orderBy('created_at', 'asc')
             ->get()
             ->map(function ($review) {
                 return [
@@ -125,7 +107,9 @@ class MovieController extends Controller
                     'rating' => $review->rate,
                 ];
             });
-    
+
+        // dd($approvedReviews);
+
         return Inertia::render('DetailPage', [
             'movie' => [
                 'id' => $movie->id,
@@ -155,5 +139,107 @@ class MovieController extends Controller
             ] : null,
             'user' => auth()->user(),
         ]);
+    }
+
+    public function edit($id)
+    {
+        $movie = Movie::with(['genres', 'actors', 'platforms', 'awards'])->findOrFail($id);
+
+        // Ambil data ID dari relasi yang sudah tersimpan untuk ditampilkan di form
+        $selectedGenres = $movie->genres->pluck('id')->toArray();
+        $selectedActors = $movie->actors->pluck('id')->toArray();
+        $selectedPlatforms = $movie->platforms->pluck('id')->toArray();
+        $selectedAwards = $movie->awards->pluck('name')->toArray(); // Ambil 'name' sesuai input
+
+        // Ambil data untuk pilihan
+        $genres = Genre::all();
+        $countries = Country::all();
+        $availability = Platform::all();
+        $actors = Actor::all();
+        $awards = Award::all();
+
+
+        return Inertia::render('CMS/CMSEditShow', [
+            'movie' => $movie,
+            'genres' => $genres,
+            'countries' => $countries,
+            'availability' => $availability,
+            'actors' => $actors,
+            'awards' => $awards,
+            'selectedGenres' => $selectedGenres,
+            'selectedActors' => $selectedActors,
+            'selectedPlatforms' => $selectedPlatforms,
+            'selectedAwards' => $selectedAwards,
+        ]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        // dd($request->all());
+        
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'alternative_title' => 'nullable|string|max:255',
+            'photo_url' => 'nullable|string',
+            'year' => 'required|integer',
+            'country_id' => 'required|exists:countries,id',
+            'synopsis' => 'required|string',
+            'link_trailer' => 'required|string',
+            'awards' => 'array',
+            'awards.*' => 'exists:awards,id',
+            'genres' => 'array',
+            'genres.*' => 'exists:genres,id',
+            'availability' => 'array',
+            'availability.*' => 'exists:platforms,id',
+            'actors' => 'array',
+            'actors.*' => 'exists:actors,id',
+        ]);
+
+        $movie = Movie::findOrFail($id);
+        $movie->update([
+            'title' => $validated['title'],
+            'alternative_title' => $validated['alternative_title'],
+            'year' => $validated['year'],
+            'country_id' => $validated['country_id'],
+            'synopsis' => $validated['synopsis'],
+            'link_trailer' => $validated['link_trailer'],
+            'photo_url' => $validated['photo_url'],
+        ]);
+
+        // Sinkronisasi relasi genres, availability, dan actors
+        $movie->genres()->sync($validated['genres']);
+        $movie->platforms()->sync($validated['availability']);
+        $movie->actors()->sync($validated['actors']);
+
+        // Perbarui awards
+        $movie->awards()->delete(); // Hapus awards lama
+        foreach ($validated['awards'] as $awardName) {
+            $movie->awards()->create(['name' => $awardName]);
+        }
+
+        return redirect()->route('cms.shows')->with('success', 'Movie berhasil diperbarui.');
+    }
+
+    public function destroy($id) {
+        $movie = Movie::findOrFail($id);
+        $movie->delete();
+        return redirect()->route('cms.shows')->with('success', 'Movie berhasil dihapus.');
+    }
+
+    public function approve($id)
+    {
+        $movie = Movie::findOrFail($id);
+        $movie->status = 'Approved';
+        $movie->save();
+
+        return redirect()->route('cms.shows.validate')->with('success', 'Movie has been approved.');
+    }
+
+    public function reject($id)
+    {
+        $movie = Movie::findOrFail($id);
+        $movie->delete();
+
+        return redirect()->route('cms.shows.validate')->with('success', 'Movie has been rejected.');
     }
 }

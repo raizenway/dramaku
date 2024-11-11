@@ -19,6 +19,8 @@ export default function DetailPage() {
         setReviews([newReview, ...reviews]);
     };
 
+    
+
     return (
         <>
             <Head title={movie.title || "Detail"} />

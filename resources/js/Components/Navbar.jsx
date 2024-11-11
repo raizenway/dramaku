@@ -2,6 +2,7 @@ import logo from "../../../public/images/logo.svg";
 import React, { useState } from "react";
 import Search from "./Search";
 import AutenthicationButton from "./AutenthicationButton";
+import { usePage } from '@inertiajs/react';
 
 function showSearch() {
   const searchForm = document.querySelector('.searchForm');
@@ -45,6 +46,8 @@ function hideSidebar() {
 
 
 export default function Navbar({searchQuery, handleSearchChange}) {
+  const { props } = usePage();
+  const user = props.auth.user;
 
   return (
     <div className="flex-col fixed header left-0 top-0 z-40 flex w-full items-center bg-dark">
@@ -61,7 +64,30 @@ export default function Navbar({searchQuery, handleSearchChange}) {
                 searchQuery={searchQuery}
                 handleSearchChange={handleSearchChange}
               />
-              <AutenthicationButton />
+                        <div className="hideOnMobile sm:flex items-center mr-4">
+            {user ? (
+              <a
+                className="text-base font-medium text-white"
+              >
+                Hello, {user.name}
+              </a>
+            ) : (
+              <>
+                <a
+                  href="/login"
+                  className="loginBtn px-[22px] py-2 text-base font-medium text-white hover:text-primary"
+                >
+                  Login
+                </a>
+                <a
+                  href="/register"
+                  className="signUpBtn rounded-md bg-white bg-opacity-20 px-6 py-2 text-base font-medium text-white duration-300 ease-in-out hover:bg-opacity-100 hover:text-dark"
+                >
+                  Register
+                </a>
+              </>
+            )}
+          </div>
             </div>
           </div>
         </div>

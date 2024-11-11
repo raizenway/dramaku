@@ -7,7 +7,7 @@ import { router, usePage } from "@inertiajs/react";
 
 
 const CMSInputShow = () => {
-  const { genres, countries, availability, actors } = usePage().props;
+  const { genres, countries, availability, actors, awards } = usePage().props;
 
   const [title, setTitle] = useState("");
   const [alternativeTitle, setAlternativeTitle] = useState("");
@@ -15,11 +15,21 @@ const CMSInputShow = () => {
   const [countryId, setCountryId] = useState("");
   const [synopsis, setSynopsis] = useState("");
   const [linkTrailer, setLinkTrailer] = useState("");
-  const [awards, setAwards] = useState([""]);
   const [selectedGenres, setSelectedGenres] = useState([]);
   const [selectedPlatforms, setSelectedPlatforms] = useState([]);
   //placeholder photo
   const [photoUrl, setPhotoUrl] = useState("");
+  const [photoFile, setPhotoFile] = useState(null);
+
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  const handleImageChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+        setSelectedImage(URL.createObjectURL(file));
+        setPhotoFile(file);
+    }
+};
   
 
   // Handler untuk checkbox genres, availability, dan actors
@@ -30,22 +40,25 @@ const CMSInputShow = () => {
   };
 
   // Award
-  const addAwardField = () => {
-      setAwards([...awards, ""]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedAwards, setSelectedAwards] = useState([]);
+
+  const filteredAwards = awards.filter((award) =>
+    award.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const addAward = (award) => {
+    if (!selectedAwards.find((a) => a.id === award.id)) {
+      setSelectedAwards([...selectedAwards, award]);
+    }
+    setSearchTerm("");
   };
 
-  const handleAwardChange = (index, value) => {
-      const newAwards = [...awards];
-      newAwards[index] = value;
-      setAwards(newAwards);
-  };
-
-  const removeAwardField = (index) => {
-      setAwards(awards.filter((_, i) => i !== index));
+  const removeAward = (awardId) => {
+    setSelectedAwards(selectedAwards.filter((award) => award.id !== awardId));
   };
 
   //Pencarian aktor
-  const [searchTerm, setSearchTerm] = useState("");
   const [selectedActors, setSelectedActors] = useState([]);
 
   const filteredActors = actors.filter((actor) =>
@@ -66,23 +79,29 @@ const CMSInputShow = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const postData = {
-      title,
-      alternative_title: alternativeTitle,
-      year,
-      country_id: countryId,
-      synopsis,
-      link_trailer: linkTrailer,
-      awards,
-      genres: selectedGenres,
-      availability: selectedPlatforms,
-      actors: selectedActors.map((actor) => actor.id),
-      photo_url: photoUrl || "https://d28hgpri8am2if.cloudfront.net/book_images/onix/cvr9781974740581/chainsaw-man-vol-12-9781974740581_hr.jpg"
-    };
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("alternative_title", alternativeTitle);
+    formData.append("year", year);
+    formData.append("country_id", countryId);
+    formData.append("synopsis", synopsis);
+    formData.append("link_trailer", linkTrailer);
+    formData.append("awards", JSON.stringify(selectedAwards.map((award) => award.id)));
+    formData.append("genres", JSON.stringify(selectedGenres));
+    formData.append("availability", JSON.stringify(selectedPlatforms));
+    formData.append("actors", JSON.stringify(selectedActors.map((actor) => actor.id)));
+    
+    if (photoFile) {
+        formData.append("photo", photoFile); // Lampirkan file foto jika ada
+    }
   
-    console.log("Data to be sent:", postData);
+    console.log("Data to be sent:", formData);
 
-    router.post("/movies/post", postData);
+    for (let pair of formData.entries()) {
+      console.log(pair[0] + ": " + pair[1]);
+    }
+
+    router.post("/movies/post", formData);
 
     setTitle("");
     setAlternativeTitle("");
@@ -90,7 +109,7 @@ const CMSInputShow = () => {
     setCountryId("");
     setSynopsis("");
     setLinkTrailer("");
-    setAwards([""]);
+    setSelectedAwards([]);
     setSelectedGenres([]);
     setSelectedPlatforms([]);
     setSelectedActors([]);
@@ -102,7 +121,7 @@ const CMSInputShow = () => {
   return (
     <>
       <Navbar />
-      <div className="flex justify-center mt-24">
+      <div className="flex justify-center mt-20">
         <CMSNav />
         <div className="flex-1 flex-wrap p-10 w-1">
           <div className="mb-4">
@@ -112,23 +131,34 @@ const CMSInputShow = () => {
             <span className="inline-block h-[2px] w-20 bg-primary" />
           </div>
           <form onSubmit={handleSubmit}>
-            <div className="grid grid-cols-3 gap-4">
-            <div className="col-span-1">
-              <div className="flex items-center justify-center bg-gray-200 rounded-lg h-64 mb-4">
-                <label htmlFor="file-upload" className="cursor-pointer">
-                  <span className="block text-gray-500 text-sm text-center">
-                    Upload Show Picture
-                  </span>
+            <div className="grid grid-cols-[auto,1fr] gap-4">
+            <div className="col-span-1 ">
+                <div className="flex items-center justify-center bg-gray-200 rounded-lg h-64 mb-4 aspect-[2/3] relative">
+                  {/* Tampilkan gambar jika photoUrl ada atau jika image sudah dipilih */}
+                  {photoUrl || selectedImage ? (
+                    <label htmlFor="file-upload" className="cursor-pointer w-full h-full">
+                      <img
+                        src={photoUrl ? (photoUrl.startsWith("http") ? photoUrl : `/${photoUrl}`) : selectedImage}
+                        alt="Uploaded"
+                        className="w-full h-full object-cover rounded-lg"
+                      />
+                    </label>
+                  ) : (
+                    <div className="w-full h-full bg-gray-300 flex items-center justify-center rounded-lg">
+                      <label htmlFor="file-upload" className="cursor-pointer absolute z-10">
+                        <span className="block text-gray-500 text-sm text-center">
+                          Upload Movie Picture
+                        </span>
+                      </label>
+                    </div>
+                  )}
                   <input
                     id="file-upload"
                     type="file"
                     className="hidden"
+                    onChange={handleImageChange}
                   />
-                </label>
-              </div>
-              <button  className="mt-4 p-2 bg-blue-500 text-white rounded">
-                Upload
-              </button>
+                </div>
               </div>
               <div className="col-span-2">
                 <div className="grid grid-cols-2 gap-4">
@@ -187,31 +217,48 @@ const CMSInputShow = () => {
                   value={linkTrailer}
                   onChange={(e) => setLinkTrailer(e.target.value)}
                 />
-                <label>Awards:</label>
-                {awards.map((award, index) => (
-                    <div key={index} className="flex items-center space-x-2">
-                        <input
-                            type="text"
-                            placeholder="Awards"
-                            className="border rounded-lg mb-1 p-2 w-full"
-                            value={award}
-                            onChange={(e) => handleAwardChange(index, e.target.value)}
-                        />
-                        <button
-                        onClick={() => removeAwardField(index)}
-                        type="button"
-                        className="text-red-500">
-                            Hapus
-                        </button>
-                    </div>
-                    ))}
-                      <button
-                        onClick={addAwardField}
-                        type="button"
-                        className="text-blue-500 mt-2">
-                          Tambah Award
-                      </button>
+                {/* Input pencarian award */}
+                <div className="my-4">
+                  <h3 className="font-bold">Add Award</h3>
+                  <input
+                    type="text"
+                    placeholder="Search Award"
+                    className="border rounded-lg p-2 w-full my-2"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                  />
+                  <div className="bg-white rounded-lg max-h-40 overflow-y-auto">
+                    {searchTerm &&
+                      filteredAwards.map((award) => (
+                        <div
+                          key={award.id}
+                          className="flex items-center p-2 hover:bg-gray-100 cursor-pointer"
+                          onClick={() => addAward(award)}
+                        >
+                          {award.name}
+                        </div>
+                      ))}
+                  </div>
+                </div>
               </div>
+
+              {/* Menampilkan award */}
+              <div className="text-black">
+                  {selectedAwards.map((award) => (
+                    <div
+                      key={award.id}
+                      className="flex items-center bg-gray-100 rounded-lg p-2 mb-2"
+                    >
+                      <span className="ml-4 flex-1">{award.name}</span>
+                      <button
+                        className="text-red-500"
+                        onClick={() => removeAward(award.id)}
+                      >
+                        x
+                      </button>
+                    </div>
+                  ))}
+                </div>
               
               {/* Checkbox */}
               <div className="col-span-3">
@@ -264,7 +311,7 @@ const CMSInputShow = () => {
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                   />
-                  <div className="bg-white shadow-md rounded-lg p-2 max-h-40 overflow-y-auto">
+                  <div className="bg-white rounded-lg p-2 max-h-40 overflow-y-auto">
                     {searchTerm &&
                       filteredActors.map((actor) => (
                         <div

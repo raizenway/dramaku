@@ -11,6 +11,7 @@ use App\Http\Controllers\MovieController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CMSShowInputController;
+use App\Http\Controllers\ValidateController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -39,19 +40,22 @@ Route::middleware(['auth', 'admin'])->group(function () {
     
     Route::get('/cms-shows', [CMSShowsController::class, 'index'])->name('cms.shows');
 
-    Route::get('/cms-shows-validate', function () {
-        return Inertia::render('CMS/CMSValidateShows');
-    })->name('cms.shows.validate');
+    //Validasi movie
+    Route::get('/cms-shows-validate', [ValidateController::class, 'index'])->name('cms.shows.validate');
+    Route::post('/cms/movies/{id}/approve', [MovieController::class, 'approve'])->name('movies.approve');
+    Route::post('/cms/movies/{id}/reject', [MovieController::class, 'reject'])->name('movies.reject');
 
     Route::get('/cms-show-input', [CMSShowInputController::class, 'index'])->name('cms.show.input');
 
     //Unggah movie
     Route::post('/movies/post', [CMSShowInputController::class, 'store'])->name('movies.post.store');
     
+    //Edit Update
     Route::prefix('cms/movies')->group(function () {
         Route::get('/', [MovieController::class, 'index'])->name('cms.movies.index');
-        Route::get('/{id}/edit', [MovieController::class, 'edit'])->name('cms.movies.edit');
-        Route::put('/{id}', [MovieController::class, 'update'])->name('cms.movies.update');
+        Route::get('/{id}/edit', [MovieController::class, 'edit'])->name('movies.edit');
+        Route::put('/{id}', [MovieController::class, 'update'])->name('movies.update');
+        Route::delete('/{id}', [MovieController::class, 'destroy'])->name('movies.destroy');
     });
 
     Route::prefix('cms-awards')->group(function () {

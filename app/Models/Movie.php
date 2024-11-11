@@ -9,6 +9,19 @@ class Movie extends Model
 {
     use HasFactory;
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($movie) {
+            $movie->genres()->detach();
+            $movie->platforms()->detach();
+            $movie->actors()->detach();
+            
+            $movie->awards()->delete();
+        });
+    }
+
     protected $fillable = [
         'title',
         'alternative_title',

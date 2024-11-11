@@ -26,7 +26,7 @@ class ReviewController extends Controller
     }
 
     public function store(Request $request)
-    {
+    {   
         $validated = $request->validate([
             'rate' => 'required|integer|between:1,5',
             'comment' => 'required|string|max:1000',
