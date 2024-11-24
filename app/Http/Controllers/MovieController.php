@@ -32,18 +32,37 @@ class MovieController extends Controller
 
     public function getFilters()
     {
-        $years = Movie::select('year')->distinct()->orderBy('year', 'desc')->pluck('year');
-        $genres = Genre::select('name')->orderBy('name')->pluck('name');
-        $availability = Platform::select('name')->orderBy('name')->pluck('name');
-        $awardOptions = ['Yes', 'No'];
+        try {
+            $years = Movie::where('status', 'Approved')
+                ->select('year')
+                ->distinct()
+                ->orderBy('year', 'desc')
+                ->pluck('year');
     
-        return response()->json([
-            'years' => $years,
-            'genres' => $genres,
-            'availability' => $availability,
-            'awards' => $awardOptions
-        ]);
+            $genres = Genre::where('status', 'Approved')
+                ->select('name')
+                ->orderBy('name')
+                ->pluck('name');
+    
+            $availability = Platform::where('status', 'Approved')
+                ->select('name')
+                ->orderBy('name')
+                ->pluck('name');
+    
+            $awardOptions = ['Yes', 'No'];
+    
+            return response()->json([
+                'years' => $years,
+                'genres' => $genres,
+                'availability' => $availability,
+                'awards' => $awardOptions
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Error fetching filters: ' . $e->getMessage());
+            return response()->json(['error' => 'Something went wrong'], 500);
+        }
     }
+    
 
     public function index()
         {

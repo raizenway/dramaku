@@ -9,7 +9,10 @@ const CMSShows = () => {
     const { movies } = usePage().props;
     const [modalVisible, setModalVisible] = useState(false);
     const [selectedShow, setSelectedShow] = useState(null);
-
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+    const [movieToDelete, setMovieToDelete] = useState(null);
+    const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+    
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 10;
 
@@ -46,20 +49,29 @@ const CMSShows = () => {
     }));
 
     const handleDelete = (movie) => {
-        if (window.confirm(`Are you sure you want to delete ${movie.title}?`)) {
-            router.delete(`/cms/movies/${movie.id}`, {
+        setMovieToDelete(movie); // Menyimpan film yang akan dihapus
+        setShowDeleteConfirm(true); // Menampilkan pop-up konfirmasi
+    };
+
+    const confirmDelete = () => {
+        if (movieToDelete) {
+            router.delete(`/cms/movies/${movieToDelete.id}`, {
                 onSuccess: () => {
-                    alert("Movie deleted successfully");
+                    setShowSuccessMessage(true);
                     setCurrentPage(1); // Refresh atau reset halaman jika diperlukan
                 },
                 onError: (errors) => {
                     console.error(errors);
                 }
             });
+            setShowDeleteConfirm(false); // Menutup pop-up setelah penghapusan
         }
     };
-    
-    
+
+    const cancelDelete = () => {
+        setShowDeleteConfirm(false); // Menutup pop-up jika tombol Cancel ditekan
+    };
+
     const actions = [
         {
             label: "Edit",
@@ -79,7 +91,6 @@ const CMSShows = () => {
             onClick: (item) => handleDelete(item),
         },
     ];
-    
 
     const closeModal = () => setModalVisible(false);
 
@@ -91,7 +102,7 @@ const CMSShows = () => {
                 actions={actions}
                 currentPage={currentPage}
                 itemsPerPage={itemsPerPage}
-                />
+            />
 
             {selectedShow && (
                 <CMSModal
@@ -109,6 +120,47 @@ const CMSShows = () => {
                     }}
                 />
             )}
+
+            {showDeleteConfirm && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+                    <div className="bg-white p-6 rounded shadow-lg">
+                        <h2 className="text-xl font-semibold mb-4">Confirm Deletion</h2>
+                        <p className="mb-4">Are you sure you want to delete {movieToDelete?.title}?</p>
+                        <div className="flex justify-end">
+                            <button
+                                onClick={cancelDelete}
+                                className="mr-4 py-2 px-4 text-white bg-primary rounded hover:primary-dark"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={confirmDelete}
+                                className="py-2 px-4 bg-red-500 text-white rounded hover:bg-red-600"
+                            >
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {showSuccessMessage && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+                    <div className="bg-white p-6 rounded shadow-lg">
+                        <h2 className="text-xl font-semibold mb-4">Success!</h2>
+                        <p className="mb-4">Movie deleted successfully.</p>
+                        <div className="flex justify-end">
+                            <button
+                                onClick={() => setShowSuccessMessage(false)} // Menutup pop-up
+                                className="py-2 px-4 text-white bg-primary rounded hover:bg-primary-dark"
+                            >
+                                OK
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
             <Pagination
                 currentPage={currentPage}
                 totalPages={totalPages}

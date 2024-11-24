@@ -28,7 +28,7 @@ const filterOptions = {
   useEffect(() => {
     axios.get('/api/filters')
       .then((response) => {
-        console.log('Filters data:', response.data); // Debugging log
+        console.log('Filters data:', response.data);
         setFilters(response.data);
       })
       .catch((error) => {
