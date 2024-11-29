@@ -15,6 +15,7 @@ const CMSValidateShows = () => {
     const indexOfLastMovie = currentPage * itemsPerPage;
     const indexOfFirstMovie = indexOfLastMovie - itemsPerPage;
     const currentMovies = movies.slice(indexOfFirstMovie, indexOfLastMovie);
+    const [showSuccessMessage, setShowSuccessMessage] = useState(null);
 
     const showData = currentMovies.map((movie) => ({
         id: movie.id,
@@ -42,7 +43,7 @@ const CMSValidateShows = () => {
     const approveMovie = (id) => {
         router.post(`cms/movies/${id}/approve`, {}, {
             onSuccess: () => {
-                alert("Movie diterima");
+                setShowSuccessMessage("Movie diterima");
                 window.location.reload();
             }
         })
@@ -52,7 +53,7 @@ const CMSValidateShows = () => {
     const rejectMovie = (id) => {
         router.post(`cms/movies/${id}/reject`, {}, {
             onSuccess: () => {
-                alert("Movie ditolak");
+                setShowSuccessMessage("Movie ditolak");
                 window.location.reload();
             }
         })
@@ -99,6 +100,24 @@ const CMSValidateShows = () => {
             totalPages={totalPages}
             onPageChange={handlePageChange}        
         />
+
+        {/* Pop-up Pesan Sukses */}
+        {showSuccessMessage && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+                    <div className="bg-white p-6 rounded shadow-lg w-96">
+                        <h2 className="text-xl font-semibold mb-4">Success!</h2>
+                        <p className="mb-4">{showSuccessMessage}</p>
+                        <div className="flex justify-end">
+                            <button
+                                onClick={() => setShowSuccessMessage(null)} // Menutup pop-up
+                                className="py-2 px-4 text-white bg-primary rounded hover:bg-primary-dark"
+                            >
+                                OK
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </CMSLayout>
     );
 

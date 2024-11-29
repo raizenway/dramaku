@@ -12,6 +12,7 @@ class CMSShowsController extends Controller
     {
         $movies = Movie::with(['genres', 'country', 'reviews', 'platforms', 'actors'])
                     ->where('status', 'Approved')
+                    ->orderBy('title', 'asc')
                     ->get();
 
         $movies = $movies->map(function ($movie) {

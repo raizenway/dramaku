@@ -10,6 +10,8 @@ import Pagination from '../Components/Home/Pagination';
 
 export default function Home() {
   
+  const { filters } = usePage().props;
+  console.log("filters at home: ", filters);
   const { movies } = usePage().props;
   const { countries } = usePage().props;
   const [searchQuery, setSearchQuery] = useState('');
@@ -82,7 +84,7 @@ export default function Home() {
         <Sidebar countries={countries} onCountrySelect={handleCountrySelect} selectedCountry={selectedCountry}/>
         <div className="w-11/12 pb-10 lg:pb-20">
           <div className="container mx-auto">
-            <Filter onFilterSubmit={handleFilterSubmit} />
+            <Filter filters={filters} onFilterSubmit={handleFilterSubmit} />
             <div className="-mx-4 flex flex-wrap mt-14">
               {currentMovies.length > 0 ? (
                 currentMovies.map((movie) => (

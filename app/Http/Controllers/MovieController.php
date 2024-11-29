@@ -30,20 +30,39 @@ class MovieController extends Controller
         return response()->json(['path' => $path], 200);
     }
 
-    public function getFilters()
-    {
-        $years = Movie::select('year')->distinct()->orderBy('year', 'desc')->pluck('year');
-        $genres = Genre::select('name')->orderBy('name')->pluck('name');
-        $availability = Platform::select('name')->orderBy('name')->pluck('name');
-        $awardOptions = ['Yes', 'No'];
+    // public function getFilters()
+    // {
+    //     try {
+    //         $years = Movie::where('status', 'Approved')
+    //             ->select('year')
+    //             ->distinct()
+    //             ->orderBy('year', 'desc')
+    //             ->pluck('year');
     
-        return response()->json([
-            'years' => $years,
-            'genres' => $genres,
-            'availability' => $availability,
-            'awards' => $awardOptions
-        ]);
-    }
+    //         $genres = Genre::where('status', 'Approved')
+    //             ->select('name')
+    //             ->orderBy('name')
+    //             ->pluck('name');
+    
+    //         $availability = Platform::where('status', 'Approved')
+    //             ->select('name')
+    //             ->orderBy('name')
+    //             ->pluck('name');
+    
+    //         $awardOptions = ['Yes', 'No'];
+    
+    //         return response()->json([
+    //             'years' => $years,
+    //             'genres' => $genres,
+    //             'availability' => $availability,
+    //             'awards' => $awardOptions
+    //         ]);
+    //     } catch (\Exception $e) {
+    //         \Log::error('Error fetching filters: ' . $e->getMessage());
+    //         return response()->json(['error' => 'Something went wrong'], 500);
+    //     }
+    // }
+    
 
     public function index()
         {
@@ -51,6 +70,7 @@ class MovieController extends Controller
                             ->orderBy('name')
                             ->pluck('name');
             $movies = Movie::with(['genres', 'country', 'reviews', 'actors', 'platforms', 'awards'])
+                        ->orderBy('title', 'asc')
                         ->where('status', 'Approved')
                         ->get();
 
@@ -71,9 +91,28 @@ class MovieController extends Controller
                 ];
             });
 
+            $filters = [
+                'years' => Movie::where('status', 'Approved')
+                                    ->distinct()
+                                    ->orderBy('year', 'desc')
+                                    ->pluck('year'),
+                'genres' => Genre::whereIn('id', function ($query) {
+                    $query->select('genre_id')
+                          ->from('movie_genres')
+                          ->whereIn('movie_id', Movie::where('status', 'Approved')->pluck('id'));
+                })->orderBy('name')->pluck('name'),
+                'availability' => Platform::whereIn('id', function ($query) {
+                    $query->select('platform_id')
+                          ->from('movie_platforms')
+                          ->whereIn('movie_id', Movie::where('status', 'Approved')->pluck('id'));
+                })->orderBy('name')->pluck('name'),
+                'awards' => ['Yes', 'No'],
+            ];
+
             return Inertia::render('Home', [
                 'movies' => $movies,
-                'countries' => $countries  
+                'countries' => $countries,
+                'filters' => $filters  
             ]);
 
         }
