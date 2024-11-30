@@ -6,6 +6,7 @@ use App\Http\Controllers\CMSShowsController;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\GenreController;
 use App\Http\Controllers\GoogleAuthController;
+use App\Http\Controllers\PlatformController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\ReviewController;
@@ -37,6 +38,11 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('/cms-countries', [CountryController::class, 'store'])->name('cms.countries.store');
     Route::put('/cms-countries/{country}', [CountryController::class, 'update'])->name('cms.countries.update');
     Route::delete('/cms-countries/{country}', [CountryController::class, 'destroy'])->name('cms.countries.destroy');
+
+    Route::get('/cms-platforms', [PlatformController::class, 'index'])->name('cms.platforms');
+    Route::post('/cms-platforms', [PlatformController::class, 'store'])->name('cms.platforms.store');
+    Route::put('/cms-platforms/{platform}', [PlatformController::class, 'update'])->name('cms.platforms.update');
+    Route::delete('/cms-platforms/{platform}', [PlatformController::class, 'destroy'])->name('cms.platforms.destroy');
     
     Route::get('/cms-shows', [CMSShowsController::class, 'index'])->name('cms.shows');
 

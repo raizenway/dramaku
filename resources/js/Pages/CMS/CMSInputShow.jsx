@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import CMSNav from "@/Components/CMS/CMSNav";
 import Navbar from "@/Components/Navbar";
 import Footer from "@/Components/Footer";
+import imageCompression from 'browser-image-compression';
+
 import { Inertia } from '@inertiajs/inertia';
 import { router, usePage } from "@inertiajs/react";
 
@@ -23,14 +25,23 @@ const CMSInputShow = () => {
 
   const [selectedImage, setSelectedImage] = useState(null);
 
-  const handleImageChange = (event) => {
+  const handleImageChange = async (event) => {
     const file = event.target.files[0];
     if (file) {
-        setSelectedImage(URL.createObjectURL(file));
-        setPhotoFile(file);
+      try {
+        const options = {
+          maxSizeMB: 2,
+          maxWidthOrHeight: 1920,
+          useWebWorker: true
+        };
+        const compressedFile = await imageCompression(file, options);
+        const compressedFileUrl = URL.createObjectURL(compressedFile);
+        setSelectedImage(compressedFileUrl);
+      } catch (error) {
+        console.error('Error compressing the image:', error);
+      }
     }
-};
-  
+  };
 
   // Handler untuk checkbox genres, availability, dan actors
   const handleCheckboxChange = (id, setState, selectedItems) => {

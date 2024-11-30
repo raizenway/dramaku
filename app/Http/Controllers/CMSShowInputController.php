@@ -34,15 +34,13 @@ class CMSShowInputController extends Controller
 
     public function store(Request $request)
     {
-        
-
         $request->merge([
             'awards' => json_decode($request->input('awards'), true),
             'genres' => json_decode($request->input('genres'), true),
             'availability' => json_decode($request->input('availability'), true),
             'actors' => json_decode($request->input('actors'), true),
         ]);
-
+    
         try {
             $validated = $request->validate([
                 'title' => 'required|string|max:255',
@@ -62,21 +60,19 @@ class CMSShowInputController extends Controller
                 'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
             ]);
         } catch (\Illuminate\Validation\ValidationException $e) {
-            dd($e->errors()); // Menampilkan pesan error validasi
+            dd($e->errors()); // Display validation error messages
         }
     
-        // dd($validated);
-        // dd($request->all());
-    
-        $photoUrl = null;
+        $photoUrl = 'images/poster/placeholder.jpg';
     
         if ($request->hasFile('photo')) {
             $file = $request->file('photo');
-            $filename = time() . '_' . $file->getClientOriginalName(); // Nama unik untuk file
-            $photoPath = $file->storeAs('images/poster', $filename, 'public'); // Menyimpan di storage/public/images/poster
-            $photoUrl = 'storage/' . $photoPath; // Set photo_url dengan path yang bisa diakses
+            $filename = time() . '_' . $file->getClientOriginalName(); // Unique name for the file
+            $file->storeAs('images/poster', $filename, 'public'); // Save to storage/public/images/poster
+            $photoUrl = 'images/poster/' . $filename;
         }
     
+        // Create the new movie
         $movie = Movie::create([
             'title' => $validated['title'],
             'alternative_title' => $validated['alternative_title'],
@@ -87,7 +83,7 @@ class CMSShowInputController extends Controller
             'photo_url' => $photoUrl,
         ]);
     
-        // Menyimpan relasi many-to-many
+        // Attach genres, platforms, and actors to the movie
         if (!empty($validated['genres'])) {
             $movie->genres()->attach($validated['genres']);
         }
@@ -98,14 +94,18 @@ class CMSShowInputController extends Controller
             $movie->actors()->attach($validated['actors']);
         }
     
-        // Menyimpan awards (pastikan relasi awards() adalah hasMany())
+        // Update the existing awards
         if (!empty($validated['awards'])) {
             foreach ($validated['awards'] as $awardId) {
-                $movie->awards()->create(['name' => $awardId]);
+                // Update each award's movie_id to the current movie's ID
+                $award = Award::find($awardId);
+                if ($award) {
+                    $award->movie_id = $movie->id;  // Assign the current movie's ID to the award
+                    $award->save();  // Save the updated award
+                }
             }
         }
-
-        return redirect()->route('cms.shows.validate')->with('success', 'Movie berhasil ditambahkan.');
-    }
     
+        return redirect()->route('cms.shows.validate')->with('success', 'Movie successfully added.');
+    }
 }

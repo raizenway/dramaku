@@ -51,16 +51,22 @@ const CMSNav = () => {
             Countries
           </Link>
           <Link 
-            href={route('cms.awards')} 
-            className={`mx-8 flex py-2 text-base font-medium hover:text-primary ${url === route('cms.awards') ? 'border-l-4 pl-4 border-primary' : ''}`}
+              href={route('cms.platforms')} 
+              className={`mx-8 flex py-2 text-base font-medium hover:text-primary ${url === route('cms.platforms') ? 'border-l-4 pl-4 border-primary' : ''}`}
           >
-            Awards
+              Platforms
           </Link>
           <Link 
             href={route('cms.genres')} 
             className={`mx-8 flex py-2 text-base font-medium hover:text-primary ${url === route('cms.genres') ? 'border-l-4 pl-4 border-primary' : ''}`}
           >
             Genres
+          </Link>
+          <Link 
+            href={route('cms.awards')} 
+            className={`mx-8 flex py-2 text-base font-medium hover:text-primary ${url === route('cms.awards') ? 'border-l-4 pl-4 border-primary' : ''}`}
+          >
+            Awards
           </Link>
           <Link 
             href={route('cms.actors')} 
