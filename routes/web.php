@@ -28,8 +28,8 @@ Route::get('/detail', function () {
     return Inertia::render('DetailPage');
 })->name('detail');
 
-Route::get('/api/filters', [MovieController::class, 'getFilters']);
-Route::get('/filters', [MovieController::class, 'getFilters']);
+// Route::get('/api/filters', [MovieController::class, 'getFilters']);
+// Route::get('/filters', [MovieController::class, 'getFilters']);
 Route::get('/movie/{id}', [MovieController::class, 'show'])->name('movies.show');
 
 Route::middleware(['auth', 'admin'])->group(function () {
