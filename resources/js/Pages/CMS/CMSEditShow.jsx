@@ -126,11 +126,13 @@ const CMSEditShow = ( {movie} ) => {
                       />
                     </label>
                   ) : (
-                    <label htmlFor="file-upload" className="cursor-pointer absolute z-10 w-full h-full bg-gray-300 flex items-center justify-center rounded-lg">
+                    <div className="w-full h-full bg-gray-300 flex items-center justify-center rounded-lg">
+                      <label htmlFor="file-upload" className="cursor-pointer absolute z-10">
                         <span className="block text-gray-500 text-sm text-center">
                           Upload Movie Picture
                         </span>
-                    </label>
+                      </label>
+                    </div>
                   )}
                   <input
                     id="file-upload"
