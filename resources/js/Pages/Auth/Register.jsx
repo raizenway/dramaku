@@ -5,6 +5,15 @@ import { Head, Link, useForm } from "@inertiajs/react";
 import google from "../../../../public/images/auth/google.svg";
 import { useState } from "react";
 
+export function validateEmail(email) {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailPattern.test(email);
+}
+
+export function validatePasswords(password, passwordConfirmation) {
+    return password === passwordConfirmation;
+}
+
 export default function Register() {
     const { data, setData, post, processing, errors, reset } = useForm({
         name: '',
@@ -20,23 +29,22 @@ export default function Register() {
 
     const submit = (e) => {
         e.preventDefault();
-    
+
         setEmailTakenError(false);
         setEmailFormatError(false);
         setPasswordRequirementError(false);
         setPasswordMismatchError(false);
-    
-        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailPattern.test(data.email)) {
+
+        if (!validateEmail(data.email)) {
             setEmailFormatError(true);
             return;
         }
-    
-        if (data.password !== data.password_confirmation) {
+
+        if (!validatePasswords(data.password, data.password_confirmation)) {
             setPasswordMismatchError(true);
             return;
         }
-    
+
         post(route('register'), {
             onFinish: () => reset('password', 'password_confirmation'),
             onError: (err) => {
@@ -82,7 +90,7 @@ export default function Register() {
                     onChange={(e) => {
                         setData('email', e.target.value);
                         setEmailTakenError(false);
-                        setEmailFormatError(false); 
+                        setEmailFormatError(false);
                     }}
                     hasError={errors.email || emailTakenError || emailFormatError}
                     required

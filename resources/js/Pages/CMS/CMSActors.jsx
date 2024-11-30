@@ -6,6 +6,74 @@ import ConfirmationModal from "@/Components/ConfirmationModal";
 import Dropdown from "@/Components/Dropdown";
 import CMSLayout from '@/Components/CMS/CMSLayout';
 
+export function validateForm(formData) {
+  const errors = {};
+
+  if (!formData.name) {
+    errors.name = "Actor name is required.";
+  }
+  if (!formData.country_id) {
+    errors.country_id = "Country selection is required.";
+  }
+  if (formData.birth && isNaN(Date.parse(formData.birth))) {
+    errors.birth = "Invalid date format.";
+  }
+  if (formData.photo_url && !/^https?:\/\/.+\..+/i.test(formData.photo_url)) {
+    errors.photo_url = "Invalid URL format.";
+  }
+
+  return errors;
+}
+
+export const handleActorSubmit = (formData, setActorList, setErrors) => {
+  const validationErrors = validateForm(formData);
+  if (Object.keys(validationErrors).length > 0) {
+    setErrors(validationErrors);
+    return;
+  }
+  Inertia.post('/cms-actors', formData, {
+    onSuccess: ({ props }) => {
+      setActorList([props.actors.find(a => a.name === formData.name), ...actorList]);
+      setErrors({});
+    },
+    onError: (errors) => {
+      setErrors(errors);
+      alert('Failed to create actor: ' + (errors.name || "Unknown error"));
+    },
+  });
+};
+
+export const handleActorUpdate = (formData, actorList, setActorList, setErrors) => {
+  if (!formData.id) {
+    alert("Error: Actor ID not found.");
+    return;
+  }
+  const validationErrors = validateForm(formData);
+  if (Object.keys(validationErrors).length > 0) {
+    setErrors(validationErrors);
+    return;
+  }
+  Inertia.put(`/cms-actors/${formData.id}`, formData, {
+    onSuccess: ({ props }) => {
+      setActorList(actorList.map(actor => 
+        actor.id === formData.id ? props.actors.find(a => a.id === formData.id) : actor
+      ));
+      setErrors({});
+    },
+    onError: (errors) => {
+      setErrors(errors);
+      alert('Failed to update actor: ' + (errors.name || "Unknown error"));
+    },
+  });
+};
+
+export const handleDeleteActor = (item, actorList, setActorList) => {
+  Inertia.delete(`/cms-actors/${item.id}`, {
+    onSuccess: () => setActorList(actorList.filter(actor => actor.id !== item.id)),
+    onError: () => alert('Failed to delete actor.'),
+  });
+};
+
 const CMSActors = () => {
   const { actors, countries = [] } = usePage().props;
   const [actorList, setActorList] = useState(actors);
@@ -29,71 +97,13 @@ const CMSActors = () => {
 
   const handleConfirm = () => {
     if (actionType === 'create') {
-      handleActorSubmit(selectedActor);
+      handleActorSubmit(selectedActor, setActorList, setErrors);
     } else if (actionType === 'delete') {
-      handleDeleteActor(selectedActor);
+      handleDeleteActor(selectedActor, actorList, setActorList);
     } else if (actionType === 'edit') {
-      handleActorUpdate(selectedActor);
+      handleActorUpdate(selectedActor, actorList, setActorList, setErrors);
     }
     setShowConfirmModal(false);
-  };
-
-  const validateForm = (formData) => {
-    const errors = {};
-    if (!formData.name) errors.name = "Actor name is required.";
-    if (!formData.country_id) errors.country_id = "Country selection is required.";
-    if (formData.birth && isNaN(Date.parse(formData.birth))) errors.birth = "Invalid date format.";
-    if (formData.photo_url && !/^https?:\/\/.+\..+/.test(formData.photo_url)) errors.photo_url = "Invalid URL format.";
-    return errors;
-  };
-
-  const handleActorSubmit = (formData) => {
-    const validationErrors = validateForm(formData);
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      return;
-    }
-    Inertia.post('/cms-actors', formData, {
-      onSuccess: ({ props }) => {
-        setActorList([props.actors.find(a => a.name === formData.name), ...actorList]);
-        setErrors({});
-      },
-      onError: (errors) => {
-        setErrors(errors);
-        alert('Failed to create actor: ' + (errors.name || "Unknown error"));
-      },
-    });
-  };
-
-  const handleActorUpdate = (formData) => {
-    if (!formData.id) {
-      alert("Error: Actor ID not found.");
-      return;
-    }
-    const validationErrors = validateForm(formData);
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      return;
-    }
-    Inertia.put(`/cms-actors/${formData.id}`, formData, {
-      onSuccess: ({ props }) => {
-        setActorList(actorList.map(actor => 
-          actor.id === formData.id ? props.actors.find(a => a.id === formData.id) : actor
-        ));
-        setErrors({});
-      },
-      onError: (errors) => {
-        setErrors(errors);
-        alert('Failed to update actor: ' + (errors.name || "Unknown error"));
-      },
-    });
-  };
-
-  const handleDeleteActor = (item) => {
-    Inertia.delete(`/cms-actors/${item.id}`, {
-      onSuccess: () => setActorList(actorList.filter(actor => actor.id !== item.id)),
-      onError: () => alert('Failed to delete actor.'),
-    });
   };
 
   const startEditingRow = (item) => {
@@ -102,7 +112,7 @@ const CMSActors = () => {
   };
 
   const saveEditedRow = () => {
-    handleActorUpdate(selectedActor);
+    handleActorUpdate(selectedActor, actorList, setActorList, setErrors);
     setEditIndex(null);
     setSelectedActor(null);
   };

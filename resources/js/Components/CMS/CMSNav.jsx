@@ -7,8 +7,6 @@ const CMSNav = () => {
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const { post } = useForm();
 
-  
-
   const handleLogout = () => {
     post(route('logout'));
     setShowLogoutConfirm(false);

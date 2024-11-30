@@ -16,4 +16,8 @@ class Award extends Model
     {
         return $this->belongsTo(Movie::class);
     }
+    public function country()
+    {
+        return $this->belongsTo(Country::class);
+    }
 }

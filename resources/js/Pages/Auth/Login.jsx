@@ -1,10 +1,66 @@
 import React, { useEffect, useState } from "react";
+import { Inertia } from '@inertiajs/react';
 import AuthFormLayout from "@/Components/Auth/AuthFormLayout";
 import InputField from "@/Components/Auth/InputField";
 import AuthButton from "@/Components/Auth/AuthButton";
 import Checkbox from "@/Components/Checkbox";
 import { Head, Link, useForm } from "@inertiajs/react";
 import google from "../../../../public/images/auth/google.svg";
+
+// Function to validate email format
+export const validateEmail = (email) => {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailPattern.test(email);
+};
+
+// Function to handle login errors
+export const handleLoginError = (error, setShowSuspendedModal, setLoginError) => {
+    if (error && error.includes('suspended')) {
+        setShowSuspendedModal(true);
+    } else {
+        setLoginError(true);
+    }
+};
+
+// Function to submit the form
+export const submitForm = (data, post, reset, setEmailError, setLoginError, setShowSuspendedModal) => {
+    if (!validateEmail(data.email)) {
+        setEmailError('Invalid email format');
+        setLoginError(false);
+        return false;
+    }
+
+    setEmailError(false);
+
+    post('/login', {
+        onFinish: () => reset('password'),
+        onError: (errors) => {
+            if (errors.email && errors.email.includes('suspended')) {
+                setShowSuspendedModal(true);
+            } else {
+                setLoginError(true);
+                setEmailError(false);
+            }
+        },
+    });
+
+    return true;
+};
+
+// Function to handle form submission
+export const handleSubmit = (e, data, post, reset, setEmailError, setLoginError, setShowSuspendedModal) => {
+    e.preventDefault();
+    const isValid = submitForm(data, post, reset, setEmailError, setLoginError, setShowSuspendedModal);
+    if (!isValid) {
+        return;
+    }
+};
+
+// Function to handle input focus
+export const handleFocus = (setLoginError, setEmailError) => {
+    setLoginError(false);
+    setEmailError(false);
+};
 
 export default function Login({ status, canResetPassword, error }) {
     const { data, setData, post, processing, reset, errors } = useForm({
@@ -23,36 +79,6 @@ export default function Login({ status, canResetPassword, error }) {
         }
     }, [error]);
 
-    const submit = (e) => {
-        e.preventDefault();
-        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-        if (!emailPattern.test(data.email)) {
-            setEmailError('Invalid email format');
-            setLoginError(false);
-            return;
-        }
-
-        setEmailError(false);
-
-        post(route('login'), {
-            onFinish: () => reset('password'),
-            onError: (errors) => {
-                if (errors.email && errors.email.includes('suspended')) {
-                    setShowSuspendedModal(true);
-                } else {
-                    setLoginError(true);
-                    setEmailError(false);
-                }
-            },
-        });
-    };
-
-    const handleFocus = () => {
-        setLoginError(false);
-        setEmailError(false);
-    };
-
     return (
         <AuthFormLayout>
             <Head title="Log in" />
@@ -62,13 +88,13 @@ export default function Login({ status, canResetPassword, error }) {
             {loginError && !error && <div className="mb-4 font-medium text-sm text-red-600">Username or password is incorrect</div>}
             {emailError && <div className="mb-4 font-medium text-sm text-red-600">{emailError}</div>}
 
-            <form onSubmit={submit}>
+            <form onSubmit={(e) => handleSubmit(e, data, post, reset, setEmailError, setLoginError, setShowSuspendedModal)}>
                 <InputField
                     type="text"
                     placeholder="Email"
                     value={data.email}
                     onChange={(e) => setData('email', e.target.value)}
-                    onFocus={handleFocus}
+                    onFocus={() => handleFocus(setLoginError, setEmailError)}
                     hasError={emailError || loginError}
                     required
                 />
@@ -77,7 +103,7 @@ export default function Login({ status, canResetPassword, error }) {
                     placeholder="Password"
                     value={data.password}
                     onChange={(e) => setData('password', e.target.value)}
-                    onFocus={handleFocus}
+                    onFocus={() => handleFocus(setLoginError, setEmailError)}
                     hasError={loginError}
                     required
                 />
@@ -98,7 +124,7 @@ export default function Login({ status, canResetPassword, error }) {
                     isPrimary={false}
                     onClick={(e) => {
                         e.preventDefault();
-                        window.location.href = route('google.auth');
+                        window.location.href = '/google/auth';
                     }}
                     type="button"
                 />
