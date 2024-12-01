@@ -63,13 +63,13 @@ class CMSShowInputController extends Controller
             dd($e->errors()); // Display validation error messages
         }
     
-        $photoUrl = 'images/poster/placeholder.jpg';
+        $photoUrl = 'storage/images/poster/placeholder.jpg';
     
         if ($request->hasFile('photo')) {
             $file = $request->file('photo');
             $filename = time() . '_' . $file->getClientOriginalName(); // Unique name for the file
             $file->storeAs('images/poster', $filename, 'public'); // Save to storage/public/images/poster
-            $photoUrl = 'images/poster/' . $filename;
+            $photoUrl = 'storage/images/poster/' . $filename;
         }
     
         // Create the new movie
