@@ -1,0 +1,44 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: laravel
+    ports:
+      - "8000:8000"
+      - "5173:5173"
+    networks:
+      - laravel-network
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_DATABASE=dramaku
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=root
+    volumes:
+      - ./:/app
+      - /app/node_modules
+    depends_on:
+      - db
+
+  db:
+    image: postgres:17
+    container_name: laravel-db
+    environment:
+      - POSTGRES_DB=dramaku
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=root
+    ports:
+      - "5433:5432"
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+      # - ./dramaku.sql:/docker-entrypoint-initdb.d/dramaku.sql
+    networks:
+      - laravel-network
+
+networks:
+  laravel-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
