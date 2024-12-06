@@ -51,7 +51,7 @@ Projek ini merupakan tugas Pengembangan Web Praktek D-4 Teknik Informatika dari 
 <br>  
 
 ## 🛠️ Teknologi yang Digunakan  
-<div>
+<div class="center">
     <img src="https://user-images.githubusercontent.com/25181517/202896760-337261ed-ee92-4979-84c4-d4b829c7355d.png" alt="TailwindCSS" width="70" height="70" style="margin: 0 500px;">
     <img src="https://user-images.githubusercontent.com/25181517/183897015-94a058a6-b86e-4e42-a37f-bf92061753e5.png" alt="React" width="50" height="50" style="margin: 0 500px;">
     <img src="https://github-production-user-asset-6210df.s3.amazonaws.com/62091613/261395532-b40892ef-efb8-4b0e-a6b5-d1cfc2f3fc35.png" alt="Vite" width="70" height="70" style="margin: 0 500px;">
