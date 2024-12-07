@@ -74,6 +74,9 @@ Projek ini merupakan tugas Pengembangan Web Praktek D-4 Teknik Informatika dari 
 
 ## 🚀 Cara Instalasi  
 
+Video Demonstrasi:
+https://www.youtube.com/watch?v=wbUlY7pWiGI&t=235s
+
 ### **Persiapan**  
 Berikut merupakan versi yang digunakan:  
 - **PHP**: `8.2.12`  
@@ -87,6 +90,7 @@ Berikut merupakan versi yang digunakan:
 
 2. **Konfigurasi .env**  
    - Atur detail database dan integrasi Google.
+   - Google Client: https://docs.google.com/document/d/1F2QXe_2MHi6y0TChJSTgKu708nCy8CT0fH-RPIRqSeE/edit?usp=drive_link
 
 3. **Buat Database Baru**  
    Buat database bernama `dramaku` di PostgreSQL.  
@@ -112,7 +116,8 @@ Berikut merupakan versi yang digunakan:
 ### **Langkah Instalasi dengan Docker**  
 
 1. **Ganti Konfigurasi Database**  
-   Sesuaikan `.env` dan `docker-compose.yml`.  
+   - Sesuaikan `.env` dan `docker-compose.yml` dengan environment perangkat Anda.
+   - Tambahkan Google Client pada `.env` : Google Client: https://docs.google.com/document/d/1F2QXe_2MHi6y0TChJSTgKu708nCy8CT0fH-RPIRqSeE/edit?usp=drive_link
 
 2. **Jalankan Docker Desktop**  
 
